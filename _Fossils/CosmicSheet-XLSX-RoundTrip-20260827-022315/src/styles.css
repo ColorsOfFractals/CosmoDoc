@@ -1,0 +1,1585 @@
+﻿:root {
+  font-family:
+    "Cascadia Code",
+    "Segoe UI",
+    sans-serif;
+
+  color: #eefaff;
+  background: #050812;
+
+  --bg: #050812;
+  --panel: rgba(10, 18, 35, 0.84);
+  --panel-strong: rgba(12, 21, 41, 0.96);
+  --line: rgba(91, 224, 255, 0.18);
+  --line-strong: rgba(91, 224, 255, 0.65);
+  --accent: #55e7ff;
+  --accent2: #cb63ff;
+  --text: #eefaff;
+  --muted: #7893a8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(0, 225, 255, 0.15),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 85% 10%,
+      rgba(192, 53, 255, 0.14),
+      transparent 36%
+    ),
+    linear-gradient(135deg, #04121a, #090615 70%);
+}
+
+body[data-theme="hacker"] {
+  --accent: #55ff82;
+  --accent2: #00ffb3;
+  --line: rgba(85, 255, 130, 0.18);
+  --line-strong: rgba(85, 255, 130, 0.7);
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(0, 255, 115, 0.16),
+      transparent 42%
+    ),
+    #020705;
+}
+
+body[data-theme="amber"] {
+  --accent: #ffbf47;
+  --accent2: #ff7b00;
+  --line: rgba(255, 191, 71, 0.18);
+  --line-strong: rgba(255, 191, 71, 0.7);
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 130, 0, 0.16),
+      transparent 42%
+    ),
+    #0b0701;
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+button,
+select {
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 8px;
+}
+
+button {
+  cursor: pointer;
+  padding: 8px 13px;
+}
+
+button:hover,
+select:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+select {
+  padding: 8px 10px;
+}
+
+.cosmic-shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows:
+    auto
+    auto
+    auto
+    1fr
+    auto;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.014) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.014) 1px,
+      transparent 1px
+    );
+
+  background-size: 32px 32px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px 18px;
+
+  background: var(--panel-strong);
+
+  border-bottom:
+    1px solid var(--line);
+
+  backdrop-filter: blur(16px);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+
+h1 {
+  margin: 3px 0 0;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+
+  text-shadow:
+    0 0 14px color-mix(
+      in srgb,
+      var(--accent) 40%,
+      transparent
+    );
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.workbook-bar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 34px;
+  padding: 5px 14px;
+
+  font-size: 12px;
+
+  background: rgba(5, 10, 22, 0.82);
+  border-bottom: 1px solid var(--line);
+}
+
+.workbook-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  box-shadow:
+    0 0 10px var(--accent);
+}
+
+.dirty-state {
+  margin-left: auto;
+
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.formula-bar {
+  display: grid;
+  grid-template-columns:
+    76px
+    44px
+    1fr;
+
+  min-height: 39px;
+
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.cell-name,
+.fx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-right: 1px solid var(--line);
+}
+
+.cell-name {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.fx {
+  color: var(--accent2);
+  font-style: italic;
+}
+
+.formula-bar input {
+  width: 100%;
+
+  color: var(--text);
+  background: transparent;
+
+  border: 0;
+  outline: none;
+
+  padding: 0 12px;
+}
+
+.sheet-stage {
+  position: relative;
+  overflow: auto;
+
+  scrollbar-color:
+    var(--line-strong)
+    rgba(0,0,0,0.2);
+}
+
+.grid {
+  display: grid;
+
+  grid-template-columns:
+    48px
+    repeat(12, minmax(118px, 1fr));
+
+  grid-auto-rows: 31px;
+
+  min-width: 1464px;
+
+  background:
+    rgba(2, 7, 17, 0.72);
+}
+
+.corner,
+.column-header,
+.row-header {
+  position: sticky;
+
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--muted);
+
+  background: #09111f;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  font-size: 11px;
+}
+
+.corner,
+.column-header {
+  top: 0;
+}
+
+.corner {
+  left: 0;
+  z-index: 5;
+}
+
+.row-header {
+  left: 0;
+}
+
+.cell {
+  min-width: 0;
+
+  padding: 6px 8px;
+
+  color: var(--text);
+
+  border-right:
+    1px solid rgba(91, 224, 255, 0.09);
+
+  border-bottom:
+    1px solid rgba(91, 224, 255, 0.09);
+
+  outline: none;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  cursor: cell;
+}
+
+.cell:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 6%,
+      transparent
+    );
+}
+
+.cell.selected {
+  position: relative;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 10%,
+      transparent
+    );
+
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    inset 0 0 18px
+      color-mix(
+        in srgb,
+        var(--accent) 10%,
+        transparent
+      );
+}
+
+.statusbar {
+  min-height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+
+  color: var(--muted);
+
+  background: var(--panel-strong);
+  border-top: 1px solid var(--line);
+
+  font-size: 11px;
+}
+
+.sheet-tabs {
+  height: 100%;
+
+  display: flex;
+  align-items: stretch;
+}
+
+.sheet-tab,
+.add-sheet {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet-tab.active {
+  color: var(--accent);
+
+  box-shadow:
+    inset 0 -2px 0 var(--accent);
+}
+
+.add-sheet {
+  font-size: 18px;
+}
+
+.cell.editing {
+  cursor: text;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  z-index: 8;
+  background: var(--panel-strong);
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    0 0 18px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* ============================================================
+   COSMICSHEET // REALITY PALETTE ENGINE
+   ============================================================ */
+
+body {
+  --world-bg: #050812;
+  --world-panel: rgba(10, 18, 35, 0.84);
+  --world-panel-strong: rgba(12, 21, 41, 0.96);
+  --world-header: #09111f;
+  --world-cell: rgba(2, 7, 17, 0.72);
+  --world-cell-line: rgba(91, 224, 255, 0.09);
+}
+
+/* Make the old architecture consume the new world variables. */
+
+.topbar,
+.statusbar {
+  background: var(--world-panel-strong);
+}
+
+.workbook-bar,
+.formula-bar {
+  background: var(--world-panel);
+}
+
+.corner,
+.column-header,
+.row-header {
+  background: var(--world-header);
+}
+
+.grid {
+  background: var(--world-cell);
+}
+
+.cell {
+  border-right-color: var(--world-cell-line);
+  border-bottom-color: var(--world-cell-line);
+}
+
+
+/* ============================================================
+   BEACH
+   Turquoise water + warm sand + coral sunset
+   ============================================================ */
+
+body[data-theme="beach"] {
+  --accent: #00d9d0;
+  --accent2: #ff6f61;
+  --text: #fff9e8;
+  --muted: #9bd9d5;
+
+  --line: rgba(62, 235, 224, 0.28);
+  --line-strong: rgba(255, 208, 111, 0.85);
+
+  --world-panel: rgba(7, 72, 89, 0.88);
+  --world-panel-strong: rgba(5, 50, 72, 0.96);
+  --world-header: #096a78;
+  --world-cell: rgba(0, 78, 94, 0.78);
+  --world-cell-line: rgba(109, 237, 226, 0.18);
+
+  background:
+    radial-gradient(circle at 80% 8%, #ffd76a 0 3%, transparent 16%),
+    linear-gradient(
+      180deg,
+      #24c9d6 0%,
+      #087e98 44%,
+      #064d68 64%,
+      #d39b58 100%
+    );
+}
+
+
+/* ============================================================
+   JUNGLE
+   Wet canopy + poisonous lime + deep moss
+   ============================================================ */
+
+body[data-theme="jungle"] {
+  --accent: #9cff00;
+  --accent2: #ffc400;
+  --text: #ebffd8;
+  --muted: #79a96d;
+
+  --line: rgba(108, 255, 68, 0.22);
+  --line-strong: rgba(169, 255, 64, 0.78);
+
+  --world-panel: rgba(14, 43, 20, 0.90);
+  --world-panel-strong: rgba(5, 28, 12, 0.98);
+  --world-header: #123a1c;
+  --world-cell: rgba(3, 24, 10, 0.90);
+  --world-cell-line: rgba(100, 255, 102, 0.10);
+
+  background:
+    radial-gradient(circle at 12% 20%, rgba(70,255,60,.24), transparent 24%),
+    radial-gradient(circle at 82% 12%, rgba(215,255,0,.13), transparent 28%),
+    linear-gradient(145deg, #031108, #0e3618 55%, #020904);
+}
+
+
+/* ============================================================
+   SNOWY
+   Actual bright world — glacier blue + snow white
+   ============================================================ */
+
+body[data-theme="snowy"] {
+  --accent: #007eae;
+  --accent2: #8157d9;
+  --text: #102633;
+  --muted: #537888;
+
+  --line: rgba(20, 115, 160, 0.22);
+  --line-strong: rgba(0, 132, 184, 0.72);
+
+  --world-panel: rgba(232, 248, 255, 0.91);
+  --world-panel-strong: rgba(244, 252, 255, 0.98);
+  --world-header: #d9f1fa;
+  --world-cell: rgba(245, 252, 255, 0.92);
+  --world-cell-line: rgba(48, 121, 150, 0.13);
+
+  background:
+    radial-gradient(circle at 25% 10%, white 0 2%, transparent 18%),
+    radial-gradient(circle at 75% 30%, #c8efff 0 5%, transparent 28%),
+    linear-gradient(155deg, #f9fdff, #b9e8f8 55%, #82bed7);
+}
+
+
+/* ============================================================
+   LAVA
+   Basalt + molten orange + sulfur
+   ============================================================ */
+
+body[data-theme="lava"] {
+  --accent: #ff4b00;
+  --accent2: #ffd000;
+  --text: #fff1d6;
+  --muted: #d98964;
+
+  --line: rgba(255, 73, 0, 0.30);
+  --line-strong: rgba(255, 178, 0, 0.92);
+
+  --world-panel: rgba(43, 10, 5, 0.92);
+  --world-panel-strong: rgba(24, 4, 2, 0.98);
+  --world-header: #3b1008;
+  --world-cell: rgba(15, 3, 2, 0.94);
+  --world-cell-line: rgba(255, 74, 0, 0.13);
+
+  background:
+    radial-gradient(circle at 75% 85%, rgba(255,211,0,.65), transparent 11%),
+    radial-gradient(circle at 32% 74%, rgba(255,55,0,.45), transparent 20%),
+    linear-gradient(135deg, #080100, #3e0902 60%, #120100);
+}
+
+
+/* ============================================================
+   FRACTAL
+   Slowly drifting impossible color geometry
+   ============================================================ */
+
+body[data-theme="fractal"] {
+  --accent: #00fff0;
+  --accent2: #ff38dc;
+  --text: #fff4ff;
+  --muted: #b98ee4;
+
+  --line: rgba(80, 255, 235, 0.24);
+  --line-strong: rgba(255, 51, 223, 0.90);
+
+  --world-panel: rgba(29, 8, 54, 0.84);
+  --world-panel-strong: rgba(13, 4, 34, 0.95);
+  --world-header: #25104b;
+  --world-cell: rgba(10, 2, 28, 0.86);
+  --world-cell-line: rgba(108, 81, 255, 0.14);
+
+  background:
+    conic-gradient(
+      from 0deg at 50% 50%,
+      #070018,
+      #3d006d,
+      #006d87,
+      #160056,
+      #6d003d,
+      #070018
+    );
+
+  background-size: 180% 180%;
+}
+
+body[data-theme="fractal"] .cosmic-shell {
+  animation: fractal-drift 48s ease-in-out infinite alternate;
+}
+
+@keyframes fractal-drift {
+  0% {
+    filter: hue-rotate(0deg);
+    background-position: 0% 0%;
+  }
+
+  50% {
+    filter: hue-rotate(28deg);
+    background-position: 50% 35%;
+  }
+
+  100% {
+    filter: hue-rotate(-18deg);
+    background-position: 100% 70%;
+  }
+}
+
+
+/* ============================================================
+   MUSIC
+   Stage black + synth blue + equalizer bands
+   ============================================================ */
+
+body[data-theme="music"] {
+  --accent: #4dc8ff;
+  --accent2: #d761ff;
+  --text: #fff7e7;
+  --muted: #9895ad;
+
+  --line: rgba(92, 197, 255, 0.22);
+  --line-strong: rgba(215, 97, 255, 0.78);
+
+  --world-panel: rgba(20, 18, 30, 0.92);
+  --world-panel-strong: rgba(8, 8, 14, 0.98);
+  --world-header: #181522;
+  --world-cell: rgba(8, 8, 13, 0.94);
+  --world-cell-line: rgba(117, 113, 151, 0.12);
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 34px,
+      rgba(82,195,255,.08) 34px 38px,
+      transparent 38px 66px
+    ),
+    linear-gradient(160deg, #07070c, #191323 60%, #090811);
+}
+
+
+/* ============================================================
+   DONUT
+   Chocolate + frosting + sprinkles
+   ============================================================ */
+
+body[data-theme="donut"] {
+  --accent: #ff77ad;
+  --accent2: #67e8f9;
+  --text: #fff3dd;
+  --muted: #d1a58f;
+
+  --line: rgba(255, 134, 180, 0.28);
+  --line-strong: rgba(103, 232, 249, 0.80);
+
+  --world-panel: rgba(92, 43, 39, 0.90);
+  --world-panel-strong: rgba(61, 27, 26, 0.97);
+  --world-header: #773f45;
+  --world-cell: rgba(53, 25, 24, 0.92);
+  --world-cell-line: rgba(255, 175, 194, 0.13);
+
+  background:
+    radial-gradient(circle at 15% 20%, #ff7cad 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 36%, #69e4ff 0 3px, transparent 4px),
+    radial-gradient(circle at 42% 78%, #ffe35e 0 3px, transparent 4px),
+    linear-gradient(145deg, #552d29, #8f4a55 60%, #4c2924);
+
+  background-size: 90px 90px, 110px 110px, 130px 130px, auto;
+}
+
+
+/* ============================================================
+   CANDYLAND
+   Full pastel irresponsibility
+   ============================================================ */
+
+body[data-theme="candyland"] {
+  --accent: #ff1493;
+  --accent2: #5b32ff;
+  --text: #401946;
+  --muted: #79557e;
+
+  --line: rgba(255, 20, 147, 0.22);
+  --line-strong: rgba(92, 50, 255, 0.68);
+
+  --world-panel: rgba(255, 226, 245, 0.91);
+  --world-panel-strong: rgba(255, 240, 249, 0.98);
+  --world-header: #ffd1ef;
+  --world-cell: rgba(255, 247, 252, 0.92);
+  --world-cell-line: rgba(185, 64, 160, 0.14);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff9ed8 0 18%,
+      #8fe7ff 18% 36%,
+      #ffe781 36% 54%,
+      #c6a4ff 54% 72%,
+      #9dffd5 72% 90%,
+      #ff9ed8 90%
+    );
+}
+
+
+/* ============================================================
+   VOID
+   Nearly nothing. Brutal monochrome.
+   ============================================================ */
+
+body[data-theme="void"] {
+  --accent: #ffffff;
+  --accent2: #8b8b8b;
+  --text: #e9e9e9;
+  --muted: #656565;
+
+  --line: rgba(255,255,255,.09);
+  --line-strong: rgba(255,255,255,.52);
+
+  --world-panel: rgba(5,5,5,.96);
+  --world-panel-strong: #000000;
+  --world-header: #090909;
+  --world-cell: #010101;
+  --world-cell-line: rgba(255,255,255,.045);
+
+  background: #000000;
+}
+
+
+/* ============================================================
+   STARRY
+   Midnight + tiny stellar points + warm starlight
+   ============================================================ */
+
+body[data-theme="starry"] {
+  --accent: #9bdcff;
+  --accent2: #ffe88d;
+  --text: #edf5ff;
+  --muted: #7589aa;
+
+  --line: rgba(135, 198, 255, 0.18);
+  --line-strong: rgba(255, 228, 128, 0.70);
+
+  --world-panel: rgba(8, 18, 45, 0.91);
+  --world-panel-strong: rgba(4, 10, 29, 0.98);
+  --world-header: #0b1736;
+  --world-cell: rgba(3, 8, 24, 0.93);
+  --world-cell-line: rgba(120, 171, 255, 0.09);
+
+  background:
+    radial-gradient(circle at 10% 20%, white 0 1px, transparent 2px),
+    radial-gradient(circle at 71% 12%, #ffeab0 0 1px, transparent 2px),
+    radial-gradient(circle at 42% 70%, #9bdcff 0 1px, transparent 2px),
+    linear-gradient(160deg, #020614, #08153c 62%, #120b31);
+
+  background-size: 78px 78px, 121px 121px, 164px 164px, auto;
+}
+
+
+/* ============================================================
+   NAUTICAL
+   Navy + sailcloth + signal red
+   ============================================================ */
+
+body[data-theme="nautical"] {
+  --accent: #f43b48;
+  --accent2: #f3ead4;
+  --text: #f8f1df;
+  --muted: #9fb6c6;
+
+  --line: rgba(230, 240, 244, 0.20);
+  --line-strong: rgba(244, 59, 72, 0.78);
+
+  --world-panel: rgba(15, 48, 70, 0.93);
+  --world-panel-strong: rgba(7, 31, 52, 0.98);
+  --world-header: #123c58;
+  --world-cell: rgba(7, 34, 53, 0.94);
+  --world-cell-line: rgba(230, 240, 244, 0.11);
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #082d49 0 44px,
+      #0d3d5b 44px 48px,
+      #082d49 48px 88px
+    );
+}
+
+
+/* ============================================================
+   MYSTICAL
+   Amethyst + teal magic + luminous lavender
+   ============================================================ */
+
+body[data-theme="mystical"] {
+  --accent: #b26cff;
+  --accent2: #3fffd8;
+  --text: #fbf0ff;
+  --muted: #ae8abe;
+
+  --line: rgba(190, 108, 255, 0.23);
+  --line-strong: rgba(63, 255, 216, 0.80);
+
+  --world-panel: rgba(50, 20, 68, 0.89);
+  --world-panel-strong: rgba(26, 8, 39, 0.97);
+  --world-header: #45265d;
+  --world-cell: rgba(21, 8, 32, 0.93);
+  --world-cell-line: rgba(181, 110, 255, 0.11);
+
+  background:
+    radial-gradient(circle at 20% 30%, rgba(179,90,255,.38), transparent 27%),
+    radial-gradient(circle at 78% 65%, rgba(50,255,217,.22), transparent 29%),
+    linear-gradient(140deg, #160820, #421959 55%, #072f35);
+}
+
+
+/* ============================================================
+   ANCIENT
+   Parchment + bronze + oxidized copper
+   ============================================================ */
+
+body[data-theme="ancient"] {
+  --accent: #9a531f;
+  --accent2: #167b72;
+  --text: #382616;
+  --muted: #786148;
+
+  --line: rgba(92, 57, 25, 0.22);
+  --line-strong: rgba(22, 123, 114, 0.72);
+
+  --world-panel: rgba(224, 197, 145, 0.93);
+  --world-panel-strong: rgba(203, 168, 108, 0.98);
+  --world-header: #cfad70;
+  --world-cell: rgba(239, 218, 176, 0.94);
+  --world-cell-line: rgba(91, 56, 24, 0.14);
+
+  background:
+    radial-gradient(circle at 30% 40%, rgba(116,71,28,.13), transparent 20%),
+    repeating-linear-gradient(
+      7deg,
+      rgba(72,43,19,.035) 0 1px,
+      transparent 1px 7px
+    ),
+    #c9a46d;
+}
+
+
+/* ============================================================
+   THEME-SPECIFIC DETAIL SHIFTS
+   ============================================================ */
+
+body[data-theme="snowy"] button,
+body[data-theme="snowy"] select,
+body[data-theme="candyland"] button,
+body[data-theme="candyland"] select,
+body[data-theme="ancient"] button,
+body[data-theme="ancient"] select {
+  background: rgba(255,255,255,.38);
+}
+
+body[data-theme="lava"] .cell.selected {
+  box-shadow:
+    inset 0 0 0 2px #ff5a00,
+    inset 0 0 22px rgba(255,120,0,.28),
+    0 0 14px rgba(255,60,0,.22);
+}
+
+body[data-theme="void"] h1 {
+  text-shadow: none;
+}
+
+body[data-theme="ancient"] h1 {
+  text-shadow: 0 1px 0 rgba(255,255,255,.3);
+}
+
+body[data-theme="donut"] .workbook-dot {
+  border-radius: 40% 55% 45% 55%;
+}
+
+body[data-theme="music"] .workbook-dot {
+  border-radius: 2px;
+}
+
+
+/* Don't animate for people/systems requesting reduced motion. */
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="fractal"] .cosmic-shell {
+    animation: none;
+  }
+}
+
+
+/* ============================================================
+   COSMICSHEET // CUSTOM THEME PORTAL
+   ============================================================ */
+
+.theme-picker {
+  position: relative;
+  min-width: 190px;
+  z-index: 100;
+}
+
+.theme-button {
+  width: 100%;
+  min-height: 42px;
+
+  display: grid;
+  grid-template-columns: 28px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+
+  color: var(--text);
+  background:
+    color-mix(
+      in srgb,
+      var(--world-panel-strong) 92%,
+      var(--accent) 8%
+    );
+
+  border: 1px solid var(--line);
+  border-radius: 10px;
+
+  text-align: left;
+
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.theme-picker.open .theme-button,
+.theme-button:hover {
+  border-color: var(--line-strong);
+
+  box-shadow:
+    0 0 0 1px
+      color-mix(
+        in srgb,
+        var(--accent) 42%,
+        transparent
+      ),
+    0 0 20px
+      color-mix(
+        in srgb,
+        var(--accent) 18%,
+        transparent
+      );
+}
+
+.theme-icon {
+  width: 24px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.theme-chevron {
+  justify-self: end;
+  color: var(--muted);
+  font-size: 18px;
+
+  transition: transform 160ms ease;
+}
+
+.theme-picker.open .theme-chevron {
+  transform: rotate(180deg);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 100%;
+  max-height: 520px;
+  overflow-y: auto;
+
+  padding: 7px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--world-panel-strong) 95%,
+      black 5%
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 55%,
+      var(--line)
+    );
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.42),
+    0 0 26px
+      color-mix(
+        in srgb,
+        var(--accent) 16%,
+        transparent
+      );
+
+  backdrop-filter: blur(18px);
+
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--accent)
+    color-mix(
+      in srgb,
+      var(--world-panel) 85%,
+      black
+    );
+}
+
+.theme-menu[hidden] {
+  display: none;
+}
+
+.theme-option {
+  width: 100%;
+  min-height: 42px;
+
+  display: grid;
+  grid-template-columns: 31px 1fr;
+  align-items: center;
+
+  padding: 7px 10px;
+  margin: 1px 0;
+
+  color: var(--text);
+
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  text-align: left;
+  white-space: nowrap;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.theme-option::before {
+  content: attr(data-icon);
+
+  display: block;
+  width: 25px;
+
+  text-align: center;
+  font-size: 18px;
+}
+
+.theme-option:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 11%,
+      transparent
+    );
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
+
+  transform: translateX(2px);
+}
+
+.theme-option.active {
+  color:
+    color-mix(
+      in srgb,
+      var(--text) 88%,
+      var(--accent)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 15%,
+      var(--world-panel)
+    );
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 72%,
+      transparent
+    );
+
+  box-shadow:
+    inset 0 0 18px
+      color-mix(
+        in srgb,
+        var(--accent) 10%,
+        transparent
+      ),
+    0 0 12px
+      color-mix(
+        in srgb,
+        var(--accent) 10%,
+        transparent
+      );
+}
+
+
+/* Make each world's picker immediately inherit that reality. */
+
+body[data-theme="lava"] .theme-menu {
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.55),
+    0 0 28px rgba(255,70,0,.25);
+}
+
+body[data-theme="snowy"] .theme-menu,
+body[data-theme="candyland"] .theme-menu,
+body[data-theme="ancient"] .theme-menu {
+  box-shadow:
+    0 16px 38px rgba(40,70,90,.22),
+    0 0 18px
+      color-mix(
+        in srgb,
+        var(--accent) 12%,
+        transparent
+      );
+}
+
+body[data-theme="void"] .theme-menu {
+  border-color: #555;
+  box-shadow: 0 18px 48px #000;
+}
+
+body[data-theme="fractal"] .theme-menu {
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.48),
+    0 0 30px rgba(255,55,220,.18),
+    0 0 46px rgba(0,255,240,.10);
+}
+
+
+/* ============================================================
+   THEME PORTAL // OPAQUE FOREGROUND LAYER
+   ============================================================ */
+
+.theme-picker {
+  z-index: 10000;
+}
+
+.theme-menu {
+  z-index: 10001;
+
+  background: var(--world-panel-strong);
+
+  opacity: 1;
+
+  backdrop-filter: none;
+
+  isolation: isolate;
+}
+
+.theme-menu::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+
+  border-radius: inherit;
+
+  background: var(--world-panel-strong);
+
+  opacity: 1;
+}
+
+/* Force every option to render against the portal,
+   never against whatever is behind it. */
+
+.theme-option {
+  position: relative;
+
+  background: var(--world-panel-strong);
+}
+
+.theme-option:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 14%,
+      var(--world-panel-strong)
+    );
+}
+
+.theme-option.active {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 20%,
+      var(--world-panel-strong)
+    );
+}
+
+/* Keep spreadsheet layers decisively underneath. */
+
+.sheet-stage,
+.grid,
+.cell,
+.column-header,
+.row-header,
+.corner {
+  z-index: auto;
+}
+
+
+/* ============================================================
+   THEME PORTAL // OPAQUE FOREGROUND LAYER
+   ============================================================ */
+
+.theme-picker {
+  z-index: 10000;
+}
+
+.theme-menu {
+  z-index: 10001;
+
+  background: var(--world-panel-strong);
+
+  opacity: 1;
+
+  backdrop-filter: none;
+
+  isolation: isolate;
+}
+
+.theme-menu::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+
+  border-radius: inherit;
+
+  background: var(--world-panel-strong);
+
+  opacity: 1;
+}
+
+/* Force every option to render against the portal,
+   never against whatever is behind it. */
+
+.theme-option {
+  position: relative;
+
+  background: var(--world-panel-strong);
+}
+
+.theme-option:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 14%,
+      var(--world-panel-strong)
+    );
+}
+
+.theme-option.active {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 20%,
+      var(--world-panel-strong)
+    );
+}
+
+/* Keep spreadsheet layers decisively underneath. */
+
+.sheet-stage,
+.grid,
+.cell,
+.column-header,
+.row-header,
+.corner {
+  z-index: auto;
+}
+
+
+/* ============================================================
+   COSMICSHEET // SOLID THEME PORTAL MATERIALS
+   No alpha. No spreadsheet bleed-through.
+   ============================================================ */
+
+body {
+  --menu-solid: #0c1529;
+}
+
+/* Every reality gets an ACTUAL opaque material */
+
+body[data-theme="beach"] {
+  --menu-solid: #07566a;
+}
+
+body[data-theme="jungle"] {
+  --menu-solid: #092d15;
+}
+
+body[data-theme="snowy"] {
+  --menu-solid: #e7f7fc;
+}
+
+body[data-theme="lava"] {
+  --menu-solid: #290904;
+}
+
+body[data-theme="fractal"] {
+  --menu-solid: #210a3d;
+}
+
+body[data-theme="music"] {
+  --menu-solid: #15121f;
+}
+
+body[data-theme="donut"] {
+  --menu-solid: #663638;
+}
+
+body[data-theme="candyland"] {
+  --menu-solid: #ffe2f3;
+}
+
+body[data-theme="void"] {
+  --menu-solid: #050505;
+}
+
+body[data-theme="starry"] {
+  --menu-solid: #091631;
+}
+
+body[data-theme="nautical"] {
+  --menu-solid: #0b3550;
+}
+
+body[data-theme="mystical"] {
+  --menu-solid: #351747;
+}
+
+body[data-theme="ancient"] {
+  --menu-solid: #d3ae70;
+}
+
+
+/* THE PORTAL ITSELF */
+
+.theme-picker {
+  z-index: 10000 !important;
+}
+
+.theme-menu {
+  z-index: 10001 !important;
+
+  background: var(--menu-solid) !important;
+  background-color: var(--menu-solid) !important;
+  background-image: none !important;
+
+  opacity: 1 !important;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  isolation: isolate;
+}
+
+
+/* Kill our previous pseudo-layer experiment */
+
+.theme-menu::before {
+  display: none !important;
+}
+
+
+/* Options can now be transparent because their PARENT
+   is genuinely solid matter. */
+
+.theme-option {
+  background: transparent !important;
+}
+
+.theme-option:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 14%,
+      var(--menu-solid)
+    ) !important;
+}
+
+.theme-option.active {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 22%,
+      var(--menu-solid)
+    ) !important;
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 72%,
+      var(--menu-solid)
+    ) !important;
+}
+
+
+/* ============================================================
+   COSMICSHEET // PORTAL STACKING REALITY FIX
+   Lift the ENTIRE topbar above the spreadsheet.
+   ============================================================ */
+
+.topbar {
+  position: relative !important;
+  z-index: 1000 !important;
+  overflow: visible !important;
+}
+
+.top-actions {
+  position: relative !important;
+  z-index: 1001 !important;
+  overflow: visible !important;
+}
+
+.theme-picker {
+  position: relative !important;
+  z-index: 1002 !important;
+  pointer-events: auto !important;
+}
+
+.theme-menu {
+  position: absolute !important;
+  z-index: 1003 !important;
+
+  background: var(--menu-solid) !important;
+  opacity: 1 !important;
+
+  pointer-events: auto !important;
+}
+
+/* Every part of the portal owns its mouse territory. */
+
+.theme-menu,
+.theme-menu *,
+.theme-option {
+  pointer-events: auto !important;
+}
+
+
+/* Everything below the toolbar stays BELOW the portal. */
+
+.workbook-bar {
+  position: relative;
+  z-index: 20;
+}
+
+.formula-bar {
+  position: relative;
+  z-index: 20;
+}
+
+.sheet-stage {
+  position: relative;
+  z-index: 10;
+}
+
+.statusbar {
+  position: relative;
+  z-index: 20;
+}
+
+
+/* ============================================================
+   COSMICSHEET // PORTAL STACKING FIX
+   Make the dropdown a real foreground interaction layer.
+   ============================================================ */
+
+.topbar {
+  position: relative !important;
+  z-index: 5000 !important;
+  overflow: visible !important;
+}
+
+.top-actions {
+  position: relative !important;
+  z-index: 5001 !important;
+  overflow: visible !important;
+}
+
+.theme-picker {
+  position: relative !important;
+  z-index: 5002 !important;
+  pointer-events: auto !important;
+}
+
+.theme-menu {
+  position: absolute !important;
+  z-index: 5003 !important;
+
+  background: var(--menu-solid) !important;
+  background-color: var(--menu-solid) !important;
+  background-image: none !important;
+
+  opacity: 1 !important;
+
+  pointer-events: auto !important;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.theme-menu,
+.theme-menu *,
+.theme-option {
+  pointer-events: auto !important;
+}
+
+/* Keep everything else decisively underneath */
+
+.workbook-bar {
+  position: relative !important;
+  z-index: 40 !important;
+}
+
+.formula-bar {
+  position: relative !important;
+  z-index: 30 !important;
+}
+
+.sheet-stage {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.statusbar {
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+/* Remove any accidental competing stacking layers */
+
+.grid {
+  position: relative;
+  z-index: 0 !important;
+}
+
+.cell {
+  z-index: 0 !important;
+}
+
+.column-header,
+.row-header {
+  z-index: 2 !important;
+}
+
+.corner {
+  z-index: 3 !important;
+}
+
