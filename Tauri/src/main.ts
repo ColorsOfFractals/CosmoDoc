@@ -14,6 +14,48 @@ let activeSheetName = "Sheet1";
 
 const cellValues = new Map<string, string>();
 
+const columnWidths = new Map<number, number>();
+const rowHeights = new Map<number, number>();
+
+function excelColumnWidthToPixels(width: number): number {
+  return Math.max(48, Math.round(width * 7 + 12));
+}
+
+function excelRowHeightToPixels(height: number): number {
+  return Math.max(24, Math.round(height * 96 / 72));
+}
+
+function applyWorkbookGeometry(): void {
+  for (let col = 0; col < COLS; col++) {
+    const gridColumn = col + 2;
+    const width = columnWidths.get(col + 1) ?? 118;
+
+    document
+      .querySelectorAll<HTMLElement>(
+        `.cell[style*="grid-column: ${gridColumn};"], .column-header[style*="grid-column: ${gridColumn};"]`
+      )
+      .forEach((element) => {
+        element.style.width = `${width}px`;
+        element.style.minWidth = `${width}px`;
+        element.style.maxWidth = `${width}px`;
+      });
+  }
+
+  for (let row = 1; row <= ROWS; row++) {
+    const gridRow = row + 1;
+    const height = rowHeights.get(row) ?? 32;
+
+    document
+      .querySelectorAll<HTMLElement>(
+        `.cell[style*="grid-row: ${gridRow};"], .row-header[style*="grid-row: ${gridRow};"]`
+      )
+      .forEach((element) => {
+        element.style.height = `${height}px`;
+        element.style.minHeight = `${height}px`;
+      });
+  }
+}
+
 function columnName(index: number): string {
   let name = "";
   let n = index + 1;
@@ -109,38 +151,36 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
         <div class="theme-picker" id="themePicker">
   <button
-    id="themeButton"
-    class="theme-button"
-    type="button"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    <span id="themeButtonIcon" class="theme-icon">🪐</span>
-    <span id="themeButtonLabel">Cosmic</span>
-    <span class="theme-chevron">⌄</span>
-  </button>
+  id="themeButton"
+  type="button"
+  aria-haspopup="menu"
+  aria-expanded="false"
+>
+  <span id="themeButtonLabel">Cosmic</span>
+  <span class="theme-caret" aria-hidden="true">&#9662;</span>
+</button>
 
   <div
-    id="themeMenu"
-    class="theme-menu"
-    role="menu"
-    hidden
-  >
-    <button type="button" class="theme-option active" data-theme-value="cosmic" data-icon="🪐">Cosmic</button>
-    <button type="button" class="theme-option" data-theme-value="beach" data-icon="🌴">Beach</button>
-    <button type="button" class="theme-option" data-theme-value="jungle" data-icon="🌿">Jungle</button>
-    <button type="button" class="theme-option" data-theme-value="snowy" data-icon="❄️">Snowy</button>
-    <button type="button" class="theme-option" data-theme-value="lava" data-icon="🌋">Lava</button>
-    <button type="button" class="theme-option" data-theme-value="fractal" data-icon="🌀">Fractal</button>
-    <button type="button" class="theme-option" data-theme-value="music" data-icon="🎵">Music</button>
-    <button type="button" class="theme-option" data-theme-value="donut" data-icon="🍩">Donut</button>
-    <button type="button" class="theme-option" data-theme-value="candyland" data-icon="🍭">Candyland</button>
-    <button type="button" class="theme-option" data-theme-value="void" data-icon="◯">Void</button>
-    <button type="button" class="theme-option" data-theme-value="starry" data-icon="✨">Starry</button>
-    <button type="button" class="theme-option" data-theme-value="nautical" data-icon="⚓">Nautical</button>
-    <button type="button" class="theme-option" data-theme-value="mystical" data-icon="🔮">Mystical</button>
-    <button type="button" class="theme-option" data-theme-value="ancient" data-icon="🏛️">Ancient</button>
-  </div>
+  id="themeMenu"
+  class="theme-menu"
+  role="menu"
+  hidden
+>
+  <button type="button" class="theme-option active" data-theme="cosmic">Cosmic</button>
+  <button type="button" class="theme-option" data-theme="beach">Beach</button>
+  <button type="button" class="theme-option" data-theme="jungle">Jungle</button>
+  <button type="button" class="theme-option" data-theme="snowy">Snowy</button>
+  <button type="button" class="theme-option" data-theme="lava">Lava</button>
+  <button type="button" class="theme-option" data-theme="fractal">Fractal</button>
+  <button type="button" class="theme-option" data-theme="music">Music</button>
+  <button type="button" class="theme-option" data-theme="donut">Donut</button>
+  <button type="button" class="theme-option" data-theme="candyland">Candyland</button>
+  <button type="button" class="theme-option" data-theme="void">Void</button>
+  <button type="button" class="theme-option" data-theme="starry">Starry</button>
+  <button type="button" class="theme-option" data-theme="nautical">Nautical</button>
+  <button type="button" class="theme-option" data-theme="mystical">Mystical</button>
+  <button type="button" class="theme-option" data-theme="ancient">Ancient</button>
+</div>
 </div>
       </div>
     </header>
@@ -211,9 +251,6 @@ const themePicker =
 const themeButton =
   document.querySelector<HTMLButtonElement>("#themeButton")!;
 
-const themeButtonIcon =
-  document.querySelector<HTMLSpanElement>("#themeButtonIcon")!;
-
 const themeButtonLabel =
   document.querySelector<HTMLSpanElement>("#themeButtonLabel")!;
 
@@ -225,43 +262,56 @@ const themeOptions =
     document.querySelectorAll<HTMLButtonElement>(".theme-option")
   );
 
-function autosizeColumn(cell: HTMLElement): void {
-  const column = Number(cell.style.gridColumn);
+/*
+ * COSMICSHEET // ASCII-SAFE THEME CATALOG
+ *
+ * Emoji are represented as JavaScript Unicode escapes.
+ * main.ts therefore does not depend on PowerShell preserving
+ * literal emoji bytes during future source mutations.
+ */
+const themeLabels: Record<string, string> = {
+  cosmic:    "\u{1FA90} Cosmic",
+  beach:     "\u{1F334} Beach",
+  jungle:    "\u{1F33F} Jungle",
+  snowy:     "\u2744\uFE0F Snowy",
+  lava:      "\u{1F30B} Lava",
+  fractal:   "\u{1F300} Fractal",
+  music:     "\u{1F3B5} Music",
+  donut:     "\u{1F369} Donut",
+  candyland: "\u{1F36D} Candyland",
+  void:      "\u25CB Void",
+  starry:    "\u2728 Starry",
+  nautical:  "\u2693 Nautical",
+  mystical:  "\u{1F52E} Mystical",
+  ancient:   "\u{1F3DB}\uFE0F Ancient"
+};
 
-  if (!column || column < 2) {
+themeOptions.forEach((option) => {
+  const theme = option.dataset.theme;
+
+  if (!theme) {
     return;
   }
 
-  const text = cell.textContent ?? "";
+  const label = themeLabels[theme];
 
-  const width = Math.min(
-    Math.max(118, text.length * 10 + 28),
-    520
-  );
+  if (!label) {
+    return;
+  }
 
-  document
-    .querySelectorAll<HTMLElement>(
-      `.cell[style*="grid-column: ${column};"], .column-header[style*="grid-column: ${column};"]`
-    )
-    .forEach((element) => {
-      element.style.width = `${width}px`;
-      element.style.minWidth = `${width}px`;
-    });
-}
+  option.textContent = label;
+});
 
-function autosizeLoadedColumns(): void {
-  document
-    .querySelectorAll<HTMLElement>(".cell")
-    .forEach((cell) => {
-      if ((cell.textContent ?? "").length > 14) {
-        autosizeColumn(cell);
-      }
-    });
-}
+const currentTheme =
+  document.body.dataset.theme ?? "cosmic";
+
+themeButtonLabel.textContent =
+  themeLabels[currentTheme] ?? themeLabels.cosmic;
+
 function refreshGrid(): void {
   grid.innerHTML = renderGrid();
+  applyWorkbookGeometry();
   selectCell(activeCell);
-  autosizeLoadedColumns();
 }
 
 function selectCell(id: string): void {
@@ -341,7 +391,7 @@ grid.addEventListener("dblclick", (event) => {
     dirtyState.textContent = "MUTATED";
     statusText.textContent = `EDITED // ${id}`;
 
-    autosizeColumn(cell);
+
   };
 
   cell.addEventListener(
@@ -399,20 +449,16 @@ function openThemeMenu(): void {
   themePicker.classList.add("open");
 }
 
-function applyTheme(
-  value: string,
-  label: string,
-  icon: string
-): void {
+function applyTheme(value: string): void {
   document.body.dataset.theme = value;
 
-  themeButtonLabel.textContent = label;
-  themeButtonIcon.textContent = icon;
+  themeButtonLabel.textContent =
+    themeLabels[value] ?? themeLabels.cosmic;
 
   themeOptions.forEach((option) => {
     option.classList.toggle(
       "active",
-      option.dataset.themeValue === value
+      option.dataset.theme === value
     );
   });
 
@@ -432,11 +478,8 @@ themeButton.addEventListener("click", (event) => {
 
 themeOptions.forEach((option) => {
   option.addEventListener("click", () => {
-    const value = option.dataset.themeValue ?? "cosmic";
-    const icon = option.dataset.icon ?? "✦";
-    const label = option.textContent?.trim() ?? "Cosmic";
-
-    applyTheme(value, label, icon);
+    const value = option.dataset.theme ?? "cosmic";
+    applyTheme(value);
   });
 });
 
@@ -494,6 +537,30 @@ document
       }
 
       cellValues.clear();
+      columnWidths.clear();
+      rowHeights.clear();
+
+      for (let col = 1; col <= COLS; col++) {
+        const excelWidth = worksheet.getColumn(col).width;
+
+        if (typeof excelWidth === "number") {
+          columnWidths.set(
+            col,
+            excelColumnWidthToPixels(excelWidth)
+          );
+        }
+      }
+
+      for (let row = 1; row <= ROWS; row++) {
+        const excelHeight = worksheet.getRow(row).height;
+
+        if (typeof excelHeight === "number") {
+          rowHeights.set(
+            row,
+            excelRowHeightToPixels(excelHeight)
+          );
+        }
+      }
 
       worksheet.eachRow(
         { includeEmpty: false },
@@ -630,6 +697,8 @@ document
   });
 
 selectCell("A1");
+
+
 
 
 
