@@ -279,7 +279,7 @@ const themeLabels: Record<string, string> = {
   music:     "\u{1F3B5} Music",
   donut:     "\u{1F369} Donut",
   candyland: "\u{1F36D} Candyland",
-  void:      "\u25CB Void",
+  void:      "\u26AB Void",
   starry:    "\u2728 Starry",
   nautical:  "\u2693 Nautical",
   mystical:  "\u{1F52E} Mystical",
