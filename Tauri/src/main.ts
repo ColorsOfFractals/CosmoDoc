@@ -3,6 +3,7 @@ import "./styles.css";
 import ExcelJS from "exceljs";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { readFile, writeFile } from "@tauri-apps/plugin-fs";
+import { invoke } from "@tauri-apps/api/core";
 
 const ROWS = 100;
 const COLS = 26;
@@ -497,6 +498,109 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+async function loadWorkbook(path: string): Promise<void> {
+  try {
+    statusText.textContent = "READING XLSX...";
+
+    const bytes = await readFile(path);
+
+    const workbook = new ExcelJS.Workbook();
+
+    await workbook.xlsx.load(bytes);
+
+    const worksheet = workbook.worksheets[0];
+
+    if (!worksheet) {
+      throw new Error("Workbook contains no worksheets.");
+    }
+
+    cellValues.clear();
+    columnWidths.clear();
+    rowHeights.clear();
+
+    for (let col = 1; col <= COLS; col++) {
+      const excelWidth = worksheet.getColumn(col).width;
+
+      if (typeof excelWidth === "number") {
+        columnWidths.set(
+          col,
+          excelColumnWidthToPixels(excelWidth)
+        );
+      }
+    }
+
+    for (let row = 1; row <= ROWS; row++) {
+      const excelHeight = worksheet.getRow(row).height;
+
+      if (typeof excelHeight === "number") {
+        rowHeights.set(
+          row,
+          excelRowHeightToPixels(excelHeight)
+        );
+      }
+    }
+
+    worksheet.eachRow(
+      { includeEmpty: false },
+      (row, rowNumber) => {
+
+        row.eachCell(
+          { includeEmpty: false },
+          (cell, colNumber) => {
+
+            const id =
+              `${columnName(colNumber - 1)}${rowNumber}`;
+
+            let value = "";
+
+            if (
+              cell.value !== null &&
+              cell.value !== undefined
+            ) {
+              if (
+                typeof cell.value === "object" &&
+                "formula" in cell.value
+              ) {
+                value = `=${cell.value.formula}`;
+              } else {
+                value = cell.text;
+              }
+            }
+
+            cellValues.set(id, value);
+          }
+        );
+      }
+    );
+
+    currentPath = path;
+
+    currentFileName =
+      path.split(/[\\/]/).pop() ?? "Workbook.xlsx";
+
+    activeSheetName = worksheet.name;
+
+    workbookName.textContent = currentFileName;
+    sheetTab.textContent = activeSheetName;
+
+    activeCell = "A1";
+
+    refreshGrid();
+
+    dirtyState.textContent = "LOADED";
+    statusText.textContent =
+      `XLSX ONLINE // ${activeSheetName}`;
+
+  } catch (error) {
+    console.error(error);
+
+    dirtyState.textContent = "FAULT";
+
+    statusText.textContent =
+      `OPEN FAILED // ${String(error)}`;
+  }
+}
+
 document
   .querySelector("#openButton")
   ?.addEventListener("click", async () => {
@@ -520,97 +624,7 @@ document
         return;
       }
 
-      const path = selected as string;
-
-      statusText.textContent = "READING XLSX...";
-
-      const bytes = await readFile(path);
-
-      const workbook = new ExcelJS.Workbook();
-
-      await workbook.xlsx.load(bytes);
-
-      const worksheet = workbook.worksheets[0];
-
-      if (!worksheet) {
-        throw new Error("Workbook contains no worksheets.");
-      }
-
-      cellValues.clear();
-      columnWidths.clear();
-      rowHeights.clear();
-
-      for (let col = 1; col <= COLS; col++) {
-        const excelWidth = worksheet.getColumn(col).width;
-
-        if (typeof excelWidth === "number") {
-          columnWidths.set(
-            col,
-            excelColumnWidthToPixels(excelWidth)
-          );
-        }
-      }
-
-      for (let row = 1; row <= ROWS; row++) {
-        const excelHeight = worksheet.getRow(row).height;
-
-        if (typeof excelHeight === "number") {
-          rowHeights.set(
-            row,
-            excelRowHeightToPixels(excelHeight)
-          );
-        }
-      }
-
-      worksheet.eachRow(
-        { includeEmpty: false },
-        (row, rowNumber) => {
-
-          row.eachCell(
-            { includeEmpty: false },
-            (cell, colNumber) => {
-
-              const id =
-                `${columnName(colNumber - 1)}${rowNumber}`;
-
-              let value = "";
-
-              if (cell.value !== null &&
-                  cell.value !== undefined) {
-
-                if (
-                  typeof cell.value === "object" &&
-                  "formula" in cell.value
-                ) {
-                  value = `=${cell.value.formula}`;
-                } else {
-                  value = cell.text;
-                }
-              }
-
-              cellValues.set(id, value);
-            }
-          );
-        }
-      );
-
-      currentPath = path;
-
-      currentFileName =
-        path.split(/[\\/]/).pop() ?? "Workbook.xlsx";
-
-      activeSheetName = worksheet.name;
-
-      workbookName.textContent = currentFileName;
-      sheetTab.textContent = activeSheetName;
-
-      activeCell = "A1";
-
-      refreshGrid();
-
-      dirtyState.textContent = "LOADED";
-      statusText.textContent =
-        `XLSX ONLINE // ${activeSheetName}`;
+      await loadWorkbook(selected as string);
 
     } catch (error) {
       console.error(error);
@@ -621,7 +635,6 @@ document
         `OPEN FAILED // ${String(error)}`;
     }
   });
-
 document
   .querySelector("#saveButton")
   ?.addEventListener("click", async () => {
@@ -694,6 +707,22 @@ document
       statusText.textContent =
         `SAVE FAILED // ${String(error)}`;
     }
+  });
+
+invoke<string | null>("startup_xlsx")
+  .then(async (startupPath) => {
+    if (!startupPath) {
+      return;
+    }
+
+    await loadWorkbook(startupPath);
+  })
+  .catch((error) => {
+    console.error(error);
+
+    dirtyState.textContent = "FAULT";
+    statusText.textContent =
+      `STARTUP OPEN FAILED // ${String(error)}`;
   });
 
 selectCell("A1");
