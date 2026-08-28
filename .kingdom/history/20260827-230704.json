@@ -1,0 +1,50 @@
+{
+  "schema": "kingdom-builder/v1",
+  "kingdom": "CosmoDoc",
+  "bake": "20260827-230704",
+  "baseCommit": "4946780919f4aad22485d0b8d5c9003375cb8cb4",
+  "construction": [
+    {
+      "node": "MODEL",
+      "commit": "61ab62dab768bb9fefad63d74c576473f94ff08c"
+    },
+    {
+      "node": "MERGES",
+      "commit": "6b04b34318a10c058d067185d30d32a191cac926"
+    },
+    {
+      "node": "STYLES",
+      "commit": "02e5f7b88003afeea353f6eed07cc4d0edc4169f"
+    },
+    {
+      "node": "MEDIA",
+      "commit": "367bdd78b1be62c312998f85985f13e424c43bc0"
+    },
+    {
+      "node": "RENDERER",
+      "commit": "96fbe2a02f6bb4e7c523b3b4f9733a5cdee2158f"
+    },
+    {
+      "node": "FORMULA",
+      "commit": "56404fb0e51efd0c4e85d83977f10979afa2d937"
+    },
+    {
+      "node": "FUNCTIONS",
+      "commit": "fc32be74596c13a1a9bfc7e987083e0c2b99e6d8"
+    }
+  ],
+  "stitchOrder": [
+    "MODEL",
+    "MERGES",
+    "STYLES",
+    "MEDIA",
+    "RENDERER",
+    "FORMULA",
+    "FUNCTIONS"
+  ],
+  "integratedCommitBeforeLedger": "b02688bedda8d1366e5a80ca6e1373421fe203f5",
+  "validation": {
+    "typescript": "PASS",
+    "frontend": "PASS"
+  }
+}
