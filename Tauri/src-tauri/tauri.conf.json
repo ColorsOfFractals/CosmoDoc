@@ -1,6 +1,6 @@
 {
     "$schema":  "https://schema.tauri.app/config/2",
-    "productName":  "CosmicSheet",
+    "productName":  "CosmoDoc",
     "version":  "0.1.0",
     "identifier":  "com.museum.cosmicsheet",
     "build":  {
@@ -13,7 +13,7 @@
                 "withGlobalTauri":  true,
                 "windows":  [
                                 {
-                                    "title":  "CosmicSheet",
+                                    "title":  "CosmoDoc",
                                     "width":  800,
                                     "height":  600
                                 }

@@ -143,7 +143,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <header class="topbar">
       <div>
         <div class="eyebrow">MUSEUM // RE-CODED TOOLS</div>
-        <h1>CosmicSheet</h1>
+        <h1>CosmoDoc</h1>
       </div>
 
       <div class="top-actions">
