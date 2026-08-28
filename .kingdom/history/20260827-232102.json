@@ -1,0 +1,86 @@
+{
+  "schema": "kingdom-builder/v1",
+  "kingdom": "CosmoDoc",
+  "bake": "20260827-232102",
+  "purpose": "recursive-functions-helper-foundation",
+  "baseCommit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e",
+  "topLevel": [
+    {
+      "node": "MODEL",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "MERGES",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "STYLES",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "MEDIA",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "RENDERER",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "FORMULA",
+      "mode": "validate",
+      "commit": "a10b5d332328d90cd6922e2c06bfe1466ef9046e"
+    },
+    {
+      "node": "FUNCTIONS",
+      "mode": "recursive-construction",
+      "commit": "a5bfc5bd8ce47a4c289c482c240f7c47ad3f5174"
+    }
+  ],
+  "recursion": {
+    "parent": "FUNCTIONS",
+    "children": [
+      {
+        "node": "VALUES",
+        "commit": "c765f511cc64ed23546850daf7dfa44a80c32fbd"
+      },
+      {
+        "node": "COERCION",
+        "commit": "99da4e45d3550409efe9446d61245f7916218ca9"
+      },
+      {
+        "node": "RANGES",
+        "commit": "aede5968c8d58ff7dd84bf9df395907fb7630ff1"
+      },
+      {
+        "node": "ERRORS",
+        "commit": "229620193d997dee882ace5fba4cf7347f7957de"
+      },
+      {
+        "node": "CRITERIA",
+        "commit": "fce70559b1fbd271aca50ec7bd84f2ed51004427"
+      },
+      {
+        "node": "ARRAYS",
+        "commit": "793b95f6e1a314bff5a30bddb6be8d474aafc588"
+      },
+      {
+        "node": "COMPARISON",
+        "commit": "69753eafa719fd9784d0dd46425dff446ce74acc"
+      }
+    ],
+    "collapsedInto": "a5bfc5bd8ce47a4c289c482c240f7c47ad3f5174"
+  },
+  "integratedCommitBeforeLedger": "a5bfc5bd8ce47a4c289c482c240f7c47ad3f5174",
+  "validation": {
+    "topLevelTypeScript": "PASS",
+    "nestedTypeScript": "PASS",
+    "functionsStitch": "PASS",
+    "rootTypeScript": "PASS",
+    "frontend": "PASS"
+  }
+}
