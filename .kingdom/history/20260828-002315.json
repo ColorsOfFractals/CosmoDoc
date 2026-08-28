@@ -1,0 +1,21 @@
+{
+  "schema": "kingdom-builder/v1",
+  "kingdom": "CosmoDoc",
+  "bake": "20260828-002315",
+  "purpose": "function-fleet-production",
+  "baseCommit": "08b9e7c15aff7e1de13ac017d8321bcc06833d0a",
+  "functions": {
+    "total": 432,
+    "families": 7,
+    "batches": 20,
+    "fleetManifest": ".kingdom/fleets/functions-20260828-002315.json",
+    "convergence": "HELD_FOR_BAKE_005"
+  },
+  "validation": {
+    "duplicateOwnership": "PASS",
+    "batchSize": "PASS",
+    "leafTypeScript": "PASS",
+    "leafFossilization": "PASS",
+    "workerLifecycle": "PASS"
+  }
+}
