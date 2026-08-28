@@ -1,0 +1,747 @@
+{
+  "schema": "kingdom-builder/construction-plan-v1",
+  "kingdom": "CosmoDoc/FUNCTIONS",
+  "createdBy": "BAKE_005",
+  "sourceFleet": ".kingdom/fleets/functions-20260828-002315.json",
+  "sourceAssessment": ".kingdom/assessments/bake005-20260828-004440/summary.json",
+  "executionPolicy": {
+    "buildOnlyJudgedTopology": true,
+    "semanticChildren": true,
+    "reinforceBeforeLoad": true,
+    "blockedNodesDoNotBuild": true,
+    "reviewRequiresEye": true
+  },
+  "infrastructureFirst": [
+    {
+      "node": "VALUES",
+      "type": "BEAM",
+      "decision": "REINFORCE",
+      "load": "CRITICAL",
+      "maturity": "SKELETON"
+    },
+    {
+      "node": "COERCION",
+      "type": "LAW",
+      "decision": "REINFORCE",
+      "load": "CRITICAL",
+      "maturity": "SKELETON"
+    },
+    {
+      "node": "CRITERIA",
+      "type": "LAW",
+      "decision": "REVIEW",
+      "load": "LOW",
+      "maturity": "SKELETON"
+    },
+    {
+      "node": "ARRAYS",
+      "type": "BEAM/PIPE",
+      "decision": "REVIEW",
+      "load": "LOW",
+      "maturity": "SKELETON"
+    },
+    {
+      "node": "COMPARISON",
+      "type": "LAW",
+      "decision": "REVIEW",
+      "load": "MEDIUM",
+      "maturity": "SKELETON"
+    },
+    {
+      "node": "WORKBOOK_CONTEXT",
+      "type": "PIPE",
+      "decision": "BUILD",
+      "load": "MEDIUM",
+      "maturity": "MISSING"
+    },
+    {
+      "node": "SPILL_ENGINE",
+      "type": "BEAM/PIPE",
+      "decision": "BUILD",
+      "load": "MEDIUM",
+      "maturity": "MISSING"
+    },
+    {
+      "node": "DATE_ENGINE",
+      "type": "UTILITY",
+      "decision": "BUILD",
+      "load": "LOW",
+      "maturity": "MISSING"
+    },
+    {
+      "node": "NUMERICAL_SOLVER",
+      "type": "UTILITY",
+      "decision": "BUILD",
+      "load": "MEDIUM",
+      "maturity": "MISSING"
+    },
+    {
+      "node": "COMPLEX_ENGINE",
+      "type": "UTILITY",
+      "decision": "BUILD",
+      "load": "MEDIUM",
+      "maturity": "MISSING"
+    }
+  ],
+  "territories": [
+    {
+      "node": "MATH-001",
+      "family": "MATH",
+      "decision": "REINFORCE",
+      "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS"
+      ],
+      "complexity": "LOW",
+      "cohesion": "MEDIUM",
+      "suggestedChildren": [],
+      "sourceFossil": "5748808c24b8a8e4ffea69606dc72d5276101f3d"
+    },
+    {
+      "node": "MATH-002",
+      "family": "MATH",
+      "decision": "REPARTITION",
+      "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "RANGES"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "LOW",
+      "suggestedChildren": [
+        {
+          "name": "MATH-002-AGGREGATION",
+          "semantic": "AGGREGATION",
+          "count": 1,
+          "functions": [
+            "PRODUCT"
+          ]
+        },
+        {
+          "name": "MATH-002-LOG_EXP_POWER",
+          "semantic": "LOG_EXP_POWER",
+          "count": 5,
+          "functions": [
+            "EXP",
+            "LN",
+            "LOG",
+            "LOG10",
+            "POWER"
+          ]
+        },
+        {
+          "name": "MATH-002-MATH_CORE",
+          "semantic": "MATH_CORE",
+          "count": 7,
+          "functions": [
+            "FACT",
+            "FACTDOUBLE",
+            "GCD",
+            "LCM",
+            "MOD",
+            "MULTINOMIAL",
+            "QUOTIENT"
+          ]
+        },
+        {
+          "name": "MATH-002-RANDOM",
+          "semantic": "RANDOM",
+          "count": 2,
+          "functions": [
+            "RAND",
+            "RANDBETWEEN"
+          ]
+        },
+        {
+          "name": "MATH-002-ROUNDING",
+          "semantic": "ROUNDING",
+          "count": 7,
+          "functions": [
+            "EVEN",
+            "FLOOR",
+            "FLOOR.MATH",
+            "FLOOR.PRECISE",
+            "INT",
+            "MROUND",
+            "ODD"
+          ]
+        },
+        {
+          "name": "MATH-002-TRIG",
+          "semantic": "TRIG",
+          "count": 3,
+          "functions": [
+            "DEGREES",
+            "PI",
+            "RADIANS"
+          ]
+        }
+      ],
+      "sourceFossil": "01c4b8c9bef09d65b5196490c61b58dd06982a1e"
+    },
+    {
+      "node": "MATH-003",
+      "family": "MATH",
+      "decision": "REPARTITION",
+      "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "RANGES",
+        "CRITERIA"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "LOW",
+      "suggestedChildren": [
+        {
+          "name": "MATH-003-AGGREGATION",
+          "semantic": "AGGREGATION",
+          "count": 7,
+          "functions": [
+            "SUBTOTAL",
+            "SUM",
+            "SUMPRODUCT",
+            "SUMSQ",
+            "SUMX2MY2",
+            "SUMX2PY2",
+            "SUMXMY2"
+          ]
+        },
+        {
+          "name": "MATH-003-CRITERIA",
+          "semantic": "CRITERIA",
+          "count": 2,
+          "functions": [
+            "SUMIF",
+            "SUMIFS"
+          ]
+        },
+        {
+          "name": "MATH-003-LOG_EXP_POWER",
+          "semantic": "LOG_EXP_POWER",
+          "count": 2,
+          "functions": [
+            "SQRT",
+            "SQRTPI"
+          ]
+        },
+        {
+          "name": "MATH-003-MATH_CORE",
+          "semantic": "MATH_CORE",
+          "count": 3,
+          "functions": [
+            "ROMAN",
+            "SERIESSUM",
+            "SIGN"
+          ]
+        },
+        {
+          "name": "MATH-003-ROUNDING",
+          "semantic": "ROUNDING",
+          "count": 4,
+          "functions": [
+            "ROUND",
+            "ROUNDDOWN",
+            "ROUNDUP",
+            "TRUNC"
+          ]
+        },
+        {
+          "name": "MATH-003-TRIG",
+          "semantic": "TRIG",
+          "count": 6,
+          "functions": [
+            "SEC",
+            "SECH",
+            "SIN",
+            "SINH",
+            "TAN",
+            "TANH"
+          ]
+        }
+      ],
+      "sourceFossil": "5339939c98bf8ee03330738ae864e0e3e3a0bb81"
+    },
+    {
+      "node": "STATISTICAL-001",
+      "family": "STATISTICAL",
+      "decision": "REPARTITION",
+      "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES",
+        "CRITERIA"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "LOW",
+      "suggestedChildren": [
+        {
+          "name": "STATISTICAL-001-COUNTING",
+          "semantic": "COUNTING",
+          "count": 3,
+          "functions": [
+            "COUNT",
+            "COUNTA",
+            "COUNTBLANK"
+          ]
+        },
+        {
+          "name": "STATISTICAL-001-CRITERIA",
+          "semantic": "CRITERIA",
+          "count": 4,
+          "functions": [
+            "AVERAGEIF",
+            "AVERAGEIFS",
+            "COUNTIF",
+            "COUNTIFS"
+          ]
+        },
+        {
+          "name": "STATISTICAL-001-DISTRIBUTION",
+          "semantic": "DISTRIBUTION",
+          "count": 7,
+          "functions": [
+            "BETA.DIST",
+            "BETA.INV",
+            "BINOM.DIST",
+            "BINOM.INV",
+            "CHISQ.DIST",
+            "CHISQ.INV",
+            "CHISQ.TEST"
+          ]
+        },
+        {
+          "name": "STATISTICAL-001-REGRESSION",
+          "semantic": "REGRESSION",
+          "count": 1,
+          "functions": [
+            "CORREL"
+          ]
+        },
+        {
+          "name": "STATISTICAL-001-STAT_CORE",
+          "semantic": "STAT_CORE",
+          "count": 9,
+          "functions": [
+            "AVERAGE",
+            "AVERAGEA",
+            "BINOM.DIST.RANGE",
+            "CHISQ.DIST.RT",
+            "CHISQ.INV.RT",
+            "CONFIDENCE.NORM",
+            "CONFIDENCE.T",
+            "COVARIANCE.P",
+            "COVARIANCE.S"
+          ]
+        },
+        {
+          "name": "STATISTICAL-001-VARIANCE",
+          "semantic": "VARIANCE",
+          "count": 1,
+          "functions": [
+            "AVEDEV"
+          ]
+        }
+      ],
+      "sourceFossil": "02cdcfbb0dfd1af48c0f22a5eb42e3316907e392"
+    },
+    {
+      "node": "STATISTICAL-002",
+      "family": "STATISTICAL",
+      "decision": "REPARTITION",
+      "reason": "Territory mixes 5 semantic responsibilities and should be divided by behavior rather than count.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "LOW",
+      "suggestedChildren": [
+        {
+          "name": "STATISTICAL-002-DISTRIBUTION",
+          "semantic": "DISTRIBUTION",
+          "count": 11,
+          "functions": [
+            "EXPON.DIST",
+            "F.DIST",
+            "F.INV",
+            "F.TEST",
+            "GAMMA",
+            "GAMMA.DIST",
+            "GAMMA.INV",
+            "GAMMALN",
+            "GAMMALN.PRECISE",
+            "GAUSS",
+            "HYPGEOM.DIST"
+          ]
+        },
+        {
+          "name": "STATISTICAL-002-RANKING",
+          "semantic": "RANKING",
+          "count": 1,
+          "functions": [
+            "LARGE"
+          ]
+        },
+        {
+          "name": "STATISTICAL-002-REGRESSION",
+          "semantic": "REGRESSION",
+          "count": 4,
+          "functions": [
+            "FORECAST.LINEAR",
+            "GROWTH",
+            "INTERCEPT",
+            "LINEST"
+          ]
+        },
+        {
+          "name": "STATISTICAL-002-STAT_CORE",
+          "semantic": "STAT_CORE",
+          "count": 7,
+          "functions": [
+            "F.DIST.RT",
+            "F.INV.RT",
+            "FISHER",
+            "FISHERINV",
+            "FREQUENCY",
+            "GEOMEAN",
+            "HARMEAN"
+          ]
+        },
+        {
+          "name": "STATISTICAL-002-VARIANCE",
+          "semantic": "VARIANCE",
+          "count": 2,
+          "functions": [
+            "DEVSQ",
+            "KURT"
+          ]
+        }
+      ],
+      "sourceFossil": "ac6ea5805a139b0a05f562130f9269a80d92d5bd"
+    },
+    {
+      "node": "STATISTICAL-003",
+      "family": "STATISTICAL",
+      "decision": "REINFORCE",
+      "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION, COMPARISON.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "MEDIUM",
+      "suggestedChildren": [],
+      "sourceFossil": "3bde1c845a2c946c25737b147b4e23a4ea5b4529"
+    },
+    {
+      "node": "STATISTICAL-004",
+      "family": "STATISTICAL",
+      "decision": "REPARTITION",
+      "reason": "Territory mixes 5 semantic responsibilities and should be divided by behavior rather than count.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES"
+      ],
+      "complexity": "LOW",
+      "cohesion": "LOW",
+      "suggestedChildren": [
+        {
+          "name": "STATISTICAL-004-DISTRIBUTION",
+          "semantic": "DISTRIBUTION",
+          "count": 5,
+          "functions": [
+            "POISSON.DIST",
+            "PROB",
+            "T.DIST",
+            "T.INV",
+            "T.TEST"
+          ]
+        },
+        {
+          "name": "STATISTICAL-004-RANKING",
+          "semantic": "RANKING",
+          "count": 5,
+          "functions": [
+            "QUARTILE.EXC",
+            "QUARTILE.INC",
+            "RANK.AVG",
+            "RANK.EQ",
+            "SMALL"
+          ]
+        },
+        {
+          "name": "STATISTICAL-004-REGRESSION",
+          "semantic": "REGRESSION",
+          "count": 4,
+          "functions": [
+            "RSQ",
+            "SLOPE",
+            "STEYX",
+            "TREND"
+          ]
+        },
+        {
+          "name": "STATISTICAL-004-STAT_CORE",
+          "semantic": "STAT_CORE",
+          "count": 5,
+          "functions": [
+            "STANDARDIZE",
+            "T.DIST.2T",
+            "T.DIST.RT",
+            "T.INV.2T",
+            "TRIMMEAN"
+          ]
+        },
+        {
+          "name": "STATISTICAL-004-VARIANCE",
+          "semantic": "VARIANCE",
+          "count": 6,
+          "functions": [
+            "SKEW",
+            "SKEW.P",
+            "STDEV.P",
+            "STDEV.S",
+            "STDEVA",
+            "STDEVPA"
+          ]
+        }
+      ],
+      "sourceFossil": "b8b6d23a1f7252f7d9cc3cbe492a1e9e969c56bc"
+    },
+    {
+      "node": "STATISTICAL-005",
+      "family": "STATISTICAL",
+      "decision": "REINFORCE",
+      "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION, COMPARISON.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "a025728070ed91c88cdf05eb02b87308c657678a"
+    },
+    {
+      "node": "TEXT-001",
+      "family": "TEXT",
+      "decision": "REINFORCE",
+      "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS"
+      ],
+      "complexity": "LOW",
+      "cohesion": "MEDIUM",
+      "suggestedChildren": [],
+      "sourceFossil": "bb11376ee1623582768d60c303231d4fe1e8746a"
+    },
+    {
+      "node": "TEXT-002",
+      "family": "TEXT",
+      "decision": "REINFORCE",
+      "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS"
+      ],
+      "complexity": "LOW",
+      "cohesion": "MEDIUM",
+      "suggestedChildren": [],
+      "sourceFossil": "27f87a6e5afbe9828175ca7fb0b4ea6057b8dc1e"
+    },
+    {
+      "node": "LOGICAL_INFO-001",
+      "family": "LOGICAL_INFO",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: WORKBOOK_CONTEXT.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "WORKBOOK_CONTEXT"
+      ],
+      "complexity": "LOW",
+      "cohesion": "MEDIUM",
+      "suggestedChildren": [],
+      "sourceFossil": "a152708c8dd54e5273884411df1de1b5cc8d7658"
+    },
+    {
+      "node": "LOGICAL_INFO-002",
+      "family": "LOGICAL_INFO",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: WORKBOOK_CONTEXT.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "WORKBOOK_CONTEXT"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "341f1cc70196cdc58bc4927c9f00e7e2e921cf88"
+    },
+    {
+      "node": "LOOKUP_REFERENCE-001",
+      "family": "LOOKUP_REFERENCE",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: SPILL_ENGINE, WORKBOOK_CONTEXT.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES",
+        "ARRAYS",
+        "SPILL_ENGINE",
+        "WORKBOOK_CONTEXT"
+      ],
+      "complexity": "HIGH",
+      "cohesion": "LOW",
+      "suggestedChildren": [],
+      "sourceFossil": "0636ee522c7c834c0b77416262302f962f056438"
+    },
+    {
+      "node": "LOOKUP_REFERENCE-002",
+      "family": "LOOKUP_REFERENCE",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: SPILL_ENGINE.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPARISON",
+        "RANGES",
+        "ARRAYS",
+        "SPILL_ENGINE"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "28aba3be4d755b93da8c1611234299d6fbe80e5f"
+    },
+    {
+      "node": "DATE_TIME-001",
+      "family": "DATE_TIME",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: DATE_ENGINE.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "DATE_ENGINE"
+      ],
+      "complexity": "MEDIUM",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "d9ed316ab1b7e5baba90b118fa29f3a74aa216d0"
+    },
+    {
+      "node": "SPECIALIZED-001",
+      "family": "SPECIALIZED",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: NUMERICAL_SOLVER.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "NUMERICAL_SOLVER"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "460bd0897a01678cabc550f1bee8433ae8570f74"
+    },
+    {
+      "node": "SPECIALIZED-002",
+      "family": "SPECIALIZED",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: NUMERICAL_SOLVER.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "NUMERICAL_SOLVER"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "2acaf22840e482fca2b8dcf91b0cc599c9144c97"
+    },
+    {
+      "node": "SPECIALIZED-003",
+      "family": "SPECIALIZED",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: NUMERICAL_SOLVER.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "NUMERICAL_SOLVER"
+      ],
+      "complexity": "LOW",
+      "cohesion": "LOW",
+      "suggestedChildren": [],
+      "sourceFossil": "954d3fcd5c00983a06128c9d8caf13c419b4e7b9"
+    },
+    {
+      "node": "SPECIALIZED-004",
+      "family": "SPECIALIZED",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: COMPLEX_ENGINE.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPLEX_ENGINE"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "e861cd2d89c283f8ce301df32d799111d7ed8440"
+    },
+    {
+      "node": "SPECIALIZED-005",
+      "family": "SPECIALIZED",
+      "decision": "BLOCK",
+      "reason": "Required structural prerequisites do not exist: COMPLEX_ENGINE.",
+      "dependencies": [
+        "VALUES",
+        "COERCION",
+        "ERRORS",
+        "COMPLEX_ENGINE"
+      ],
+      "complexity": "LOW",
+      "cohesion": "HIGH",
+      "suggestedChildren": [],
+      "sourceFossil": "d3ddf76a383627434dbdeb958e7a5dcb6baf56d6"
+    }
+  ],
+  "convergence": "HELD_FOR_BAKE_006"
+}

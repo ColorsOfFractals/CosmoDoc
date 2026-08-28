@@ -1,0 +1,112 @@
+{
+  "node": "STATISTICAL-001",
+  "family": "STATISTICAL",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "02cdcfbb0dfd1af48c0f22a5eb42e3316907e392",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "COUNTING",
+    "CRITERIA",
+    "DISTRIBUTION",
+    "REGRESSION",
+    "STAT_CORE",
+    "VARIANCE"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "RANGES",
+    "CRITERIA"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON",
+    "CRITERIA"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "RANGES",
+    "CRITERIA",
+    "STATISTICAL_DISTRIBUTIONS"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REPARTITION",
+  "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+  "suggestedChildren": [
+    {
+      "name": "STATISTICAL-001-COUNTING",
+      "semantic": "COUNTING",
+      "count": 3,
+      "functions": [
+        "COUNT",
+        "COUNTA",
+        "COUNTBLANK"
+      ]
+    },
+    {
+      "name": "STATISTICAL-001-CRITERIA",
+      "semantic": "CRITERIA",
+      "count": 4,
+      "functions": [
+        "AVERAGEIF",
+        "AVERAGEIFS",
+        "COUNTIF",
+        "COUNTIFS"
+      ]
+    },
+    {
+      "name": "STATISTICAL-001-DISTRIBUTION",
+      "semantic": "DISTRIBUTION",
+      "count": 7,
+      "functions": [
+        "BETA.DIST",
+        "BETA.INV",
+        "BINOM.DIST",
+        "BINOM.INV",
+        "CHISQ.DIST",
+        "CHISQ.INV",
+        "CHISQ.TEST"
+      ]
+    },
+    {
+      "name": "STATISTICAL-001-REGRESSION",
+      "semantic": "REGRESSION",
+      "count": 1,
+      "functions": [
+        "CORREL"
+      ]
+    },
+    {
+      "name": "STATISTICAL-001-STAT_CORE",
+      "semantic": "STAT_CORE",
+      "count": 9,
+      "functions": [
+        "AVERAGE",
+        "AVERAGEA",
+        "BINOM.DIST.RANGE",
+        "CHISQ.DIST.RT",
+        "CHISQ.INV.RT",
+        "CONFIDENCE.NORM",
+        "CONFIDENCE.T",
+        "COVARIANCE.P",
+        "COVARIANCE.S"
+      ]
+    },
+    {
+      "name": "STATISTICAL-001-VARIANCE",
+      "semantic": "VARIANCE",
+      "count": 1,
+      "functions": [
+        "AVEDEV"
+      ]
+    }
+  ]
+}

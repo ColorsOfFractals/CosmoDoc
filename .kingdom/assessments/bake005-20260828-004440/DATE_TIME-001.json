@@ -1,0 +1,37 @@
+{
+  "node": "DATE_TIME-001",
+  "family": "DATE_TIME",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "d9ed316ab1b7e5baba90b118fa29f3a74aa216d0",
+  "cohesion": "HIGH",
+  "semanticBuckets": [
+    "CALENDAR",
+    "CLOCK"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "MISSING",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "DATE_ENGINE"
+  ],
+  "missingDependencies": [
+    "DATE_ENGINE"
+  ],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "VOLATILITY",
+    "CALENDAR_RULES"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "POOR",
+  "decision": "BLOCK",
+  "reason": "Required structural prerequisites do not exist: DATE_ENGINE.",
+  "suggestedChildren": []
+}

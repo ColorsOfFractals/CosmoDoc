@@ -1,0 +1,39 @@
+{
+  "node": "LOGICAL_INFO-001",
+  "family": "LOGICAL_INFO",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "a152708c8dd54e5273884411df1de1b5cc8d7658",
+  "cohesion": "MEDIUM",
+  "semanticBuckets": [
+    "CONTEXTUAL",
+    "INFORMATION",
+    "LOGICAL"
+  ],
+  "structuralLoad": "HIGH",
+  "dependencyReadiness": "MISSING",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "WORKBOOK_CONTEXT"
+  ],
+  "missingDependencies": [
+    "WORKBOOK_CONTEXT"
+  ],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [
+    "WORKBOOK_CONTEXT"
+  ],
+  "blastRadius": "HIGH",
+  "testability": "POOR",
+  "decision": "BLOCK",
+  "reason": "Required structural prerequisites do not exist: WORKBOOK_CONTEXT.",
+  "suggestedChildren": []
+}

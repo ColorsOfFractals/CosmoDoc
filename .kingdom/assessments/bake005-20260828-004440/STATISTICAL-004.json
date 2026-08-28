@@ -1,0 +1,100 @@
+{
+  "node": "STATISTICAL-004",
+  "family": "STATISTICAL",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "b8b6d23a1f7252f7d9cc3cbe492a1e9e969c56bc",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "DISTRIBUTION",
+    "RANKING",
+    "REGRESSION",
+    "STAT_CORE",
+    "VARIANCE"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "RANGES"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [
+    "STATISTICAL_DISTRIBUTIONS"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REPARTITION",
+  "reason": "Territory mixes 5 semantic responsibilities and should be divided by behavior rather than count.",
+  "suggestedChildren": [
+    {
+      "name": "STATISTICAL-004-DISTRIBUTION",
+      "semantic": "DISTRIBUTION",
+      "count": 5,
+      "functions": [
+        "POISSON.DIST",
+        "PROB",
+        "T.DIST",
+        "T.INV",
+        "T.TEST"
+      ]
+    },
+    {
+      "name": "STATISTICAL-004-RANKING",
+      "semantic": "RANKING",
+      "count": 5,
+      "functions": [
+        "QUARTILE.EXC",
+        "QUARTILE.INC",
+        "RANK.AVG",
+        "RANK.EQ",
+        "SMALL"
+      ]
+    },
+    {
+      "name": "STATISTICAL-004-REGRESSION",
+      "semantic": "REGRESSION",
+      "count": 4,
+      "functions": [
+        "RSQ",
+        "SLOPE",
+        "STEYX",
+        "TREND"
+      ]
+    },
+    {
+      "name": "STATISTICAL-004-STAT_CORE",
+      "semantic": "STAT_CORE",
+      "count": 5,
+      "functions": [
+        "STANDARDIZE",
+        "T.DIST.2T",
+        "T.DIST.RT",
+        "T.INV.2T",
+        "TRIMMEAN"
+      ]
+    },
+    {
+      "name": "STATISTICAL-004-VARIANCE",
+      "semantic": "VARIANCE",
+      "count": 6,
+      "functions": [
+        "SKEW",
+        "SKEW.P",
+        "STDEV.P",
+        "STDEV.S",
+        "STDEVA",
+        "STDEVPA"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "node": "TEXT-002",
+  "family": "TEXT",
+  "classification": "CAPABILITY",
+  "functionCount": 13,
+  "sourceFossil": "27f87a6e5afbe9828175ca7fb0b4ea6057b8dc1e",
+  "cohesion": "MEDIUM",
+  "semanticBuckets": [
+    "BYTE_TEXT",
+    "CONVERSION_FORMAT",
+    "SEARCH_REPLACE",
+    "TEXT_CORE"
+  ],
+  "structuralLoad": "LOW",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [],
+  "blastRadius": "LOW",
+  "testability": "GOOD",
+  "decision": "REINFORCE",
+  "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION.",
+  "suggestedChildren": []
+}

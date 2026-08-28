@@ -1,0 +1,39 @@
+{
+  "node": "STATISTICAL-003",
+  "family": "STATISTICAL",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "3bde1c845a2c946c25737b147b4e23a4ea5b4529",
+  "cohesion": "MEDIUM",
+  "semanticBuckets": [
+    "DISTRIBUTION",
+    "RANKING",
+    "REGRESSION",
+    "STAT_CORE"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "RANGES"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "RANGES",
+    "STATISTICAL_DISTRIBUTIONS"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REINFORCE",
+  "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION, COMPARISON.",
+  "suggestedChildren": []
+}

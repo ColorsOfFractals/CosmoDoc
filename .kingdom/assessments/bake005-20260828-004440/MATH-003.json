@@ -1,0 +1,108 @@
+{
+  "node": "MATH-003",
+  "family": "MATH",
+  "classification": "CAPABILITY",
+  "functionCount": 24,
+  "sourceFossil": "5339939c98bf8ee03330738ae864e0e3e3a0bb81",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "AGGREGATION",
+    "CRITERIA",
+    "LOG_EXP_POWER",
+    "MATH_CORE",
+    "ROUNDING",
+    "TRIG"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "RANGES",
+    "CRITERIA"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "CRITERIA"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "RANGES",
+    "CRITERIA"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REPARTITION",
+  "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+  "suggestedChildren": [
+    {
+      "name": "MATH-003-AGGREGATION",
+      "semantic": "AGGREGATION",
+      "count": 7,
+      "functions": [
+        "SUBTOTAL",
+        "SUM",
+        "SUMPRODUCT",
+        "SUMSQ",
+        "SUMX2MY2",
+        "SUMX2PY2",
+        "SUMXMY2"
+      ]
+    },
+    {
+      "name": "MATH-003-CRITERIA",
+      "semantic": "CRITERIA",
+      "count": 2,
+      "functions": [
+        "SUMIF",
+        "SUMIFS"
+      ]
+    },
+    {
+      "name": "MATH-003-LOG_EXP_POWER",
+      "semantic": "LOG_EXP_POWER",
+      "count": 2,
+      "functions": [
+        "SQRT",
+        "SQRTPI"
+      ]
+    },
+    {
+      "name": "MATH-003-MATH_CORE",
+      "semantic": "MATH_CORE",
+      "count": 3,
+      "functions": [
+        "ROMAN",
+        "SERIESSUM",
+        "SIGN"
+      ]
+    },
+    {
+      "name": "MATH-003-ROUNDING",
+      "semantic": "ROUNDING",
+      "count": 4,
+      "functions": [
+        "ROUND",
+        "ROUNDDOWN",
+        "ROUNDUP",
+        "TRUNC"
+      ]
+    },
+    {
+      "name": "MATH-003-TRIG",
+      "semantic": "TRIG",
+      "count": 6,
+      "functions": [
+        "SEC",
+        "SECH",
+        "SIN",
+        "SINH",
+        "TAN",
+        "TANH"
+      ]
+    }
+  ]
+}

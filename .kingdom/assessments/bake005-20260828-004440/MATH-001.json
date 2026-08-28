@@ -1,0 +1,33 @@
+{
+  "node": "MATH-001",
+  "family": "MATH",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "5748808c24b8a8e4ffea69606dc72d5276101f3d",
+  "cohesion": "MEDIUM",
+  "semanticBuckets": [
+    "AGGREGATION",
+    "MATH_CORE",
+    "ROUNDING",
+    "TRIG"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REINFORCE",
+  "reason": "Required support exists only as a skeletal boundary: VALUES, COERCION.",
+  "suggestedChildren": []
+}

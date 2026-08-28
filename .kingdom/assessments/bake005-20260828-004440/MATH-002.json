@@ -1,0 +1,107 @@
+{
+  "node": "MATH-002",
+  "family": "MATH",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "01c4b8c9bef09d65b5196490c61b58dd06982a1e",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "AGGREGATION",
+    "LOG_EXP_POWER",
+    "MATH_CORE",
+    "RANDOM",
+    "ROUNDING",
+    "TRIG"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "RANGES"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "RANGES",
+    "VOLATILITY"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REPARTITION",
+  "reason": "Territory mixes 6 semantic responsibilities and should be divided by behavior rather than count.",
+  "suggestedChildren": [
+    {
+      "name": "MATH-002-AGGREGATION",
+      "semantic": "AGGREGATION",
+      "count": 1,
+      "functions": [
+        "PRODUCT"
+      ]
+    },
+    {
+      "name": "MATH-002-LOG_EXP_POWER",
+      "semantic": "LOG_EXP_POWER",
+      "count": 5,
+      "functions": [
+        "EXP",
+        "LN",
+        "LOG",
+        "LOG10",
+        "POWER"
+      ]
+    },
+    {
+      "name": "MATH-002-MATH_CORE",
+      "semantic": "MATH_CORE",
+      "count": 7,
+      "functions": [
+        "FACT",
+        "FACTDOUBLE",
+        "GCD",
+        "LCM",
+        "MOD",
+        "MULTINOMIAL",
+        "QUOTIENT"
+      ]
+    },
+    {
+      "name": "MATH-002-RANDOM",
+      "semantic": "RANDOM",
+      "count": 2,
+      "functions": [
+        "RAND",
+        "RANDBETWEEN"
+      ]
+    },
+    {
+      "name": "MATH-002-ROUNDING",
+      "semantic": "ROUNDING",
+      "count": 7,
+      "functions": [
+        "EVEN",
+        "FLOOR",
+        "FLOOR.MATH",
+        "FLOOR.PRECISE",
+        "INT",
+        "MROUND",
+        "ODD"
+      ]
+    },
+    {
+      "name": "MATH-002-TRIG",
+      "semantic": "TRIG",
+      "count": 3,
+      "functions": [
+        "DEGREES",
+        "PI",
+        "RADIANS"
+      ]
+    }
+  ]
+}

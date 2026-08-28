@@ -1,0 +1,50 @@
+{
+  "node": "LOOKUP_REFERENCE-001",
+  "family": "LOOKUP_REFERENCE",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "0636ee522c7c834c0b77416262302f962f056438",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "CONTEXTUAL",
+    "CORE",
+    "DYNAMIC_ARRAY",
+    "LOOKUP",
+    "REFERENCE"
+  ],
+  "structuralLoad": "HIGH",
+  "dependencyReadiness": "MISSING",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "RANGES",
+    "ARRAYS",
+    "SPILL_ENGINE",
+    "WORKBOOK_CONTEXT"
+  ],
+  "missingDependencies": [
+    "SPILL_ENGINE",
+    "WORKBOOK_CONTEXT"
+  ],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON",
+    "ARRAYS"
+  ],
+  "semanticComplexity": "HIGH",
+  "complexitySignals": [
+    "RANGES",
+    "REFERENCES",
+    "WORKBOOK_CONTEXT",
+    "VOLATILITY",
+    "DYNAMIC_ARRAYS"
+  ],
+  "blastRadius": "HIGH",
+  "testability": "POOR",
+  "decision": "BLOCK",
+  "reason": "Required structural prerequisites do not exist: SPILL_ENGINE, WORKBOOK_CONTEXT.",
+  "suggestedChildren": []
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "kingdom-builder/v1",
+  "kingdom": "CosmoDoc",
+  "bake": "20260828-004440",
+  "purpose": "structural-judgment",
+  "baseCommit": "2358a5cfabfbeb782e33a0fa8d291bd80eab53b8",
+  "sourceFleet": ".kingdom/fleets/functions-20260828-002315.json",
+  "assessment": {
+    "root": ".kingdom/assessments/bake005-20260828-004440",
+    "summary": ".kingdom/assessments/bake005-20260828-004440/summary.json"
+  },
+  "nextPlan": ".kingdom/plans/bake006-function-topology-20260828-004440.json",
+  "decisions": {
+    "BUILD": 0,
+    "FRACTURE": 0,
+    "REPARTITION": 5,
+    "REINFORCE": 5,
+    "BLOCK": 10,
+    "REVIEW": 0
+  },
+  "implementationStorm": "NOT_IGNITED",
+  "convergence": "HELD_FOR_BAKE_006"
+}

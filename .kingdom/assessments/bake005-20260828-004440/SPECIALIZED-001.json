@@ -1,0 +1,36 @@
+{
+  "node": "SPECIALIZED-001",
+  "family": "SPECIALIZED",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "460bd0897a01678cabc550f1bee8433ae8570f74",
+  "cohesion": "HIGH",
+  "semanticBuckets": [
+    "FINANCIAL",
+    "ITERATIVE_FINANCIAL"
+  ],
+  "structuralLoad": "HIGH",
+  "dependencyReadiness": "MISSING",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "NUMERICAL_SOLVER"
+  ],
+  "missingDependencies": [
+    "NUMERICAL_SOLVER"
+  ],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [
+    "ITERATIVE_NUMERICS"
+  ],
+  "blastRadius": "HIGH",
+  "testability": "POOR",
+  "decision": "BLOCK",
+  "reason": "Required structural prerequisites do not exist: NUMERICAL_SOLVER.",
+  "suggestedChildren": []
+}

@@ -1,0 +1,137 @@
+{
+  "schema": "kingdom-builder/structural-assessment-v1",
+  "kingdom": "CosmoDoc/FUNCTIONS",
+  "bake": "20260828-004440",
+  "baseCommit": "2358a5cfabfbeb782e33a0fa8d291bd80eab53b8",
+  "sourceFleet": ".kingdom/fleets/functions-20260828-002315.json",
+  "philosophy": {
+    "maxLeafSizeDoesNotImplySanity": true,
+    "semanticFracturePreferred": true,
+    "reviewIsValidOutcome": true,
+    "confidenceMayNotBeInvented": true
+  },
+  "totals": {
+    "functions": 432,
+    "territories": 20
+  },
+  "decisions": {
+    "BUILD": 0,
+    "FRACTURE": 0,
+    "REPARTITION": 5,
+    "REINFORCE": 5,
+    "BLOCK": 10,
+    "REVIEW": 0
+  },
+  "infrastructure": [
+    {
+      "node": "VALUES",
+      "type": "BEAM",
+      "maturity": "SKELETON",
+      "downstreamLoad": 20,
+      "load": "CRITICAL",
+      "decision": "REINFORCE",
+      "path": "src\\formula\\helpers\\values.ts"
+    },
+    {
+      "node": "COERCION",
+      "type": "LAW",
+      "maturity": "SKELETON",
+      "downstreamLoad": 20,
+      "load": "CRITICAL",
+      "decision": "REINFORCE",
+      "path": "src\\formula\\helpers\\coercion.ts"
+    },
+    {
+      "node": "RANGES",
+      "type": "PIPE",
+      "maturity": "PRESENT",
+      "downstreamLoad": 9,
+      "load": "MEDIUM",
+      "decision": "READY",
+      "path": "src\\formula\\helpers\\ranges.ts"
+    },
+    {
+      "node": "ERRORS",
+      "type": "LAW",
+      "maturity": "PRESENT",
+      "downstreamLoad": 20,
+      "load": "CRITICAL",
+      "decision": "READY",
+      "path": "src\\formula\\helpers\\errors.ts"
+    },
+    {
+      "node": "CRITERIA",
+      "type": "LAW",
+      "maturity": "SKELETON",
+      "downstreamLoad": 2,
+      "load": "LOW",
+      "decision": "REVIEW",
+      "path": "src\\formula\\helpers\\criteria.ts"
+    },
+    {
+      "node": "ARRAYS",
+      "type": "BEAM/PIPE",
+      "maturity": "SKELETON",
+      "downstreamLoad": 2,
+      "load": "LOW",
+      "decision": "REVIEW",
+      "path": "src\\formula\\helpers\\arrays.ts"
+    },
+    {
+      "node": "COMPARISON",
+      "type": "LAW",
+      "maturity": "SKELETON",
+      "downstreamLoad": 9,
+      "load": "MEDIUM",
+      "decision": "REVIEW",
+      "path": "src\\formula\\helpers\\comparison.ts"
+    },
+    {
+      "node": "WORKBOOK_CONTEXT",
+      "type": "PIPE",
+      "maturity": "MISSING",
+      "downstreamLoad": 3,
+      "load": "MEDIUM",
+      "decision": "BUILD",
+      "path": null
+    },
+    {
+      "node": "SPILL_ENGINE",
+      "type": "BEAM/PIPE",
+      "maturity": "MISSING",
+      "downstreamLoad": 2,
+      "load": "MEDIUM",
+      "decision": "BUILD",
+      "path": null
+    },
+    {
+      "node": "DATE_ENGINE",
+      "type": "UTILITY",
+      "maturity": "MISSING",
+      "downstreamLoad": 1,
+      "load": "LOW",
+      "decision": "BUILD",
+      "path": null
+    },
+    {
+      "node": "NUMERICAL_SOLVER",
+      "type": "UTILITY",
+      "maturity": "MISSING",
+      "downstreamLoad": 3,
+      "load": "MEDIUM",
+      "decision": "BUILD",
+      "path": null
+    },
+    {
+      "node": "COMPLEX_ENGINE",
+      "type": "UTILITY",
+      "maturity": "MISSING",
+      "downstreamLoad": 2,
+      "load": "MEDIUM",
+      "decision": "BUILD",
+      "path": null
+    }
+  ],
+  "implementationStorm": "NOT_IGNITED",
+  "nextBake": "006"
+}

@@ -1,0 +1,101 @@
+{
+  "node": "STATISTICAL-002",
+  "family": "STATISTICAL",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "ac6ea5805a139b0a05f562130f9269a80d92d5bd",
+  "cohesion": "LOW",
+  "semanticBuckets": [
+    "DISTRIBUTION",
+    "RANKING",
+    "REGRESSION",
+    "STAT_CORE",
+    "VARIANCE"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "PARTIAL",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPARISON",
+    "RANGES"
+  ],
+  "missingDependencies": [],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION",
+    "COMPARISON"
+  ],
+  "semanticComplexity": "MEDIUM",
+  "complexitySignals": [
+    "RANGES",
+    "STATISTICAL_DISTRIBUTIONS"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "GOOD",
+  "decision": "REPARTITION",
+  "reason": "Territory mixes 5 semantic responsibilities and should be divided by behavior rather than count.",
+  "suggestedChildren": [
+    {
+      "name": "STATISTICAL-002-DISTRIBUTION",
+      "semantic": "DISTRIBUTION",
+      "count": 11,
+      "functions": [
+        "EXPON.DIST",
+        "F.DIST",
+        "F.INV",
+        "F.TEST",
+        "GAMMA",
+        "GAMMA.DIST",
+        "GAMMA.INV",
+        "GAMMALN",
+        "GAMMALN.PRECISE",
+        "GAUSS",
+        "HYPGEOM.DIST"
+      ]
+    },
+    {
+      "name": "STATISTICAL-002-RANKING",
+      "semantic": "RANKING",
+      "count": 1,
+      "functions": [
+        "LARGE"
+      ]
+    },
+    {
+      "name": "STATISTICAL-002-REGRESSION",
+      "semantic": "REGRESSION",
+      "count": 4,
+      "functions": [
+        "FORECAST.LINEAR",
+        "GROWTH",
+        "INTERCEPT",
+        "LINEST"
+      ]
+    },
+    {
+      "name": "STATISTICAL-002-STAT_CORE",
+      "semantic": "STAT_CORE",
+      "count": 7,
+      "functions": [
+        "F.DIST.RT",
+        "F.INV.RT",
+        "FISHER",
+        "FISHERINV",
+        "FREQUENCY",
+        "GEOMEAN",
+        "HARMEAN"
+      ]
+    },
+    {
+      "name": "STATISTICAL-002-VARIANCE",
+      "semantic": "VARIANCE",
+      "count": 2,
+      "functions": [
+        "DEVSQ",
+        "KURT"
+      ]
+    }
+  ]
+}

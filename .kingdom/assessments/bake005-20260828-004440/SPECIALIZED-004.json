@@ -1,0 +1,36 @@
+{
+  "node": "SPECIALIZED-004",
+  "family": "SPECIALIZED",
+  "classification": "CAPABILITY",
+  "functionCount": 25,
+  "sourceFossil": "e861cd2d89c283f8ce301df32d799111d7ed8440",
+  "cohesion": "HIGH",
+  "semanticBuckets": [
+    "COMPLEX",
+    "ENGINEERING"
+  ],
+  "structuralLoad": "MEDIUM",
+  "dependencyReadiness": "MISSING",
+  "dependencies": [
+    "VALUES",
+    "COERCION",
+    "ERRORS",
+    "COMPLEX_ENGINE"
+  ],
+  "missingDependencies": [
+    "COMPLEX_ENGINE"
+  ],
+  "skeletalDependencies": [
+    "VALUES",
+    "COERCION"
+  ],
+  "semanticComplexity": "LOW",
+  "complexitySignals": [
+    "COMPLEX_NUMBERS"
+  ],
+  "blastRadius": "MEDIUM",
+  "testability": "POOR",
+  "decision": "BLOCK",
+  "reason": "Required structural prerequisites do not exist: COMPLEX_ENGINE.",
+  "suggestedChildren": []
+}
