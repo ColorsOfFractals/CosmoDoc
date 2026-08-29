@@ -1,0 +1,82 @@
+﻿[
+    {
+        "Node":  "VALUES",
+        "Commit":  "263fec2",
+        "Path":  "Tauri/src/formula/helpers/values.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  9
+    },
+    {
+        "Node":  "COERCION",
+        "Commit":  "aefeaa6",
+        "Path":  "Tauri/src/formula/helpers/coercion.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  7
+    },
+    {
+        "Node":  "CRITERIA",
+        "Commit":  "84ccf5f",
+        "Path":  "Tauri/src/formula/helpers/criteria.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  4
+    },
+    {
+        "Node":  "ARRAYS",
+        "Commit":  "e74f185",
+        "Path":  "Tauri/src/formula/helpers/arrays.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  9
+    },
+    {
+        "Node":  "COMPARISON",
+        "Commit":  "91b836d",
+        "Path":  "Tauri/src/formula/helpers/comparison.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  6
+    },
+    {
+        "Node":  "WORKBOOK_CONTEXT",
+        "Commit":  "020da41",
+        "Path":  "Tauri/src/formula/workbook-context.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  8
+    },
+    {
+        "Node":  "SPILL_ENGINE",
+        "Commit":  "9daddfb",
+        "Path":  "Tauri/src/formula/spill.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  9
+    },
+    {
+        "Node":  "DATE_ENGINE",
+        "Commit":  "39cfe2a",
+        "Path":  "Tauri/src/formula/date-engine.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  6
+    },
+    {
+        "Node":  "NUMERICAL_SOLVER",
+        "Commit":  "87fcdf1",
+        "Path":  "Tauri/src/formula/numerical.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  4
+    },
+    {
+        "Node":  "COMPLEX_ENGINE",
+        "Commit":  "7611de1",
+        "Path":  "Tauri/src/formula/complex.ts",
+        "Ancestry":  true,
+        "Tracked":  true,
+        "Exports":  11
+    }
+]

@@ -1,0 +1,28 @@
+﻿{
+    "schema":  "kingdom-builder/territory-judge-v1",
+    "laws":  [
+                 "MISSING_DEPENDENCY -\u003e BLOCK",
+                 "LOW_COHESION -\u003e REPARTITION",
+                 "SKELETAL_DEPENDENCY -\u003e REINFORCE",
+                 "HIGH_COHESION + HIGH_OR_EXTREME_COMPLEXITY -\u003e FRACTURE",
+                 "POOR_TESTABILITY -\u003e REVIEW",
+                 "OTHERWISE -\u003e BUILD"
+             ],
+    "precedence":  [
+                       "BLOCK before topology",
+                       "TOPOLOGY BEFORE REINFORCEMENT",
+                       "REINFORCE before complexity",
+                       "FRACTURE before testability",
+                       "REVIEW before BUILD"
+                   ],
+    "principles":  [
+                       "Repair may not certify itself.",
+                       "The Judge is not above proof.",
+                       "Removing a BLOCK does not imply BUILD.",
+                       "A historical verdict may remain correct while its evidence becomes stale.",
+                       "A leaf must be able to explain why it is a leaf.",
+                       "Builder may recommend construction. It may never invent confidence."
+                   ],
+    "historicalJudgeFossil":  "ca917e2205012be966e0e298c5f91506c1ac5e79",
+    "replayRequirement":  "20/20"
+}

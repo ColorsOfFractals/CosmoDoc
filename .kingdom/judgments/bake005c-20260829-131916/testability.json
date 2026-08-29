@@ -1,0 +1,58 @@
+﻿[
+    {
+        "Node":  "DATE_TIME-001",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "DATE_ENGINE",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "LOGICAL_INFO-001",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "WORKBOOK_CONTEXT",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "LOGICAL_INFO-002",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "WORKBOOK_CONTEXT",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "LOOKUP_REFERENCE-002",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "SPILL_ENGINE",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "SPECIALIZED-001",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "NUMERICAL_SOLVER",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "SPECIALIZED-002",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "NUMERICAL_SOLVER",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "SPECIALIZED-004",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "COMPLEX_ENGINE",
+        "Evidence":  "exported module seam"
+    },
+    {
+        "Node":  "SPECIALIZED-005",
+        "Historical":  "POOR",
+        "Current":  "READY",
+        "Infrastructure":  "COMPLEX_ENGINE",
+        "Evidence":  "exported module seam"
+    }
+]

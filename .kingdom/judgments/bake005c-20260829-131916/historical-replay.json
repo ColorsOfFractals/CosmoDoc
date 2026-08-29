@@ -1,0 +1,122 @@
+﻿[
+    {
+        "Node":  "DATE_TIME-001",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "LOGICAL_INFO-001",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "LOGICAL_INFO-002",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "LOOKUP_REFERENCE-001",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "LOOKUP_REFERENCE-002",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "MATH-001",
+        "Original":  "REINFORCE",
+        "Replayed":  "REINFORCE",
+        "Match":  true
+    },
+    {
+        "Node":  "MATH-002",
+        "Original":  "REPARTITION",
+        "Replayed":  "REPARTITION",
+        "Match":  true
+    },
+    {
+        "Node":  "MATH-003",
+        "Original":  "REPARTITION",
+        "Replayed":  "REPARTITION",
+        "Match":  true
+    },
+    {
+        "Node":  "SPECIALIZED-001",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "SPECIALIZED-002",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "SPECIALIZED-003",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "SPECIALIZED-004",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "SPECIALIZED-005",
+        "Original":  "BLOCK",
+        "Replayed":  "BLOCK",
+        "Match":  true
+    },
+    {
+        "Node":  "STATISTICAL-001",
+        "Original":  "REPARTITION",
+        "Replayed":  "REPARTITION",
+        "Match":  true
+    },
+    {
+        "Node":  "STATISTICAL-002",
+        "Original":  "REPARTITION",
+        "Replayed":  "REPARTITION",
+        "Match":  true
+    },
+    {
+        "Node":  "STATISTICAL-003",
+        "Original":  "REINFORCE",
+        "Replayed":  "REINFORCE",
+        "Match":  true
+    },
+    {
+        "Node":  "STATISTICAL-004",
+        "Original":  "REPARTITION",
+        "Replayed":  "REPARTITION",
+        "Match":  true
+    },
+    {
+        "Node":  "STATISTICAL-005",
+        "Original":  "REINFORCE",
+        "Replayed":  "REINFORCE",
+        "Match":  true
+    },
+    {
+        "Node":  "TEXT-001",
+        "Original":  "REINFORCE",
+        "Replayed":  "REINFORCE",
+        "Match":  true
+    },
+    {
+        "Node":  "TEXT-002",
+        "Original":  "REINFORCE",
+        "Replayed":  "REINFORCE",
+        "Match":  true
+    }
+]

@@ -1,0 +1,25 @@
+﻿{
+    "schema":  "kingdom-builder/bake005-convergence-v1",
+    "bake":  "005.C",
+    "repairedHead":  "289f57364c0cfe0c4e553b6ce53246be2b406aa1",
+    "historicalJudgeFossil":  "ca917e2205012be966e0e298c5f91506c1ac5e79",
+    "historicalReplay":  "20/20",
+    "infrastructureReady":  "12/12",
+    "testabilityCleared":  "8/8",
+    "finalDistribution":  {
+                              "BUILD":  13,
+                              "FRACTURE":  0,
+                              "REPARTITION":  7,
+                              "REINFORCE":  0,
+                              "BLOCK":  0,
+                              "REVIEW":  0
+                          },
+    "block":  0,
+    "reinforce":  0,
+    "review":  0,
+    "typescript":  "PASS",
+    "productionBuild":  "PASS",
+    "selfCertification":  false,
+    "convergence":  "PASS",
+    "next":  "BAKE 006"
+}

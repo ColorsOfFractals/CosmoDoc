@@ -1,0 +1,122 @@
+﻿[
+    {
+        "Node":  "DATE_TIME-001",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "LOGICAL_INFO-001",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "LOGICAL_INFO-002",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "LOOKUP_REFERENCE-001",
+        "Historical":  "BLOCK",
+        "Current":  "REPARTITION",
+        "Testability":  "POOR"
+    },
+    {
+        "Node":  "LOOKUP_REFERENCE-002",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "MATH-001",
+        "Historical":  "REINFORCE",
+        "Current":  "BUILD",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "MATH-002",
+        "Historical":  "REPARTITION",
+        "Current":  "REPARTITION",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "MATH-003",
+        "Historical":  "REPARTITION",
+        "Current":  "REPARTITION",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "SPECIALIZED-001",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "SPECIALIZED-002",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "SPECIALIZED-003",
+        "Historical":  "BLOCK",
+        "Current":  "REPARTITION",
+        "Testability":  "POOR"
+    },
+    {
+        "Node":  "SPECIALIZED-004",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "SPECIALIZED-005",
+        "Historical":  "BLOCK",
+        "Current":  "BUILD",
+        "Testability":  "READY"
+    },
+    {
+        "Node":  "STATISTICAL-001",
+        "Historical":  "REPARTITION",
+        "Current":  "REPARTITION",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "STATISTICAL-002",
+        "Historical":  "REPARTITION",
+        "Current":  "REPARTITION",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "STATISTICAL-003",
+        "Historical":  "REINFORCE",
+        "Current":  "BUILD",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "STATISTICAL-004",
+        "Historical":  "REPARTITION",
+        "Current":  "REPARTITION",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "STATISTICAL-005",
+        "Historical":  "REINFORCE",
+        "Current":  "BUILD",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "TEXT-001",
+        "Historical":  "REINFORCE",
+        "Current":  "BUILD",
+        "Testability":  "GOOD"
+    },
+    {
+        "Node":  "TEXT-002",
+        "Historical":  "REINFORCE",
+        "Current":  "BUILD",
+        "Testability":  "GOOD"
+    }
+]
