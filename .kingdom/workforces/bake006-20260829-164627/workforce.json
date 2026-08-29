@@ -1,0 +1,1022 @@
+﻿{
+    "schema":  "cosmodoc.kingdom.workforce.v1",
+    "kingdom":  "CosmoDoc",
+    "bake":  "006.A.3-R1",
+    "generatedUtc":  "2026-08-29T23:46:27.8492662Z",
+    "ancestry":  {
+                     "protectedFossil":  "12acd7dc23ebc4e19387ee323fac282a3ea5c954",
+                     "sourceFleet":  ".kingdom/fleets/functions-20260828-002315.json",
+                     "historicalJudgeFossil":  "ca917e2205012be966e0e298c5f91506c1ac5e79",
+                     "court":  "005.C",
+                     "contractValidation":  "006.A.2",
+                     "architecture":  "006.A.2B",
+                     "eyeAdmission":  "006.A.2C"
+                 },
+    "infrastructure":  {
+                           "repairedEvidence":  "10/10",
+                           "foundational":  "2/2",
+                           "wholeReady":  "12/12"
+                       },
+    "topology":  {
+                     "authoritativeParents":  20,
+                     "directBuildParents":  13,
+                     "repartitionParents":  7,
+                     "constructionLeaves":  50,
+                     "authoritativeFunctions":  432
+                 },
+    "proof":  {
+                  "parentCoverage":  "20/20",
+                  "functionCoverage":  "432/432",
+                  "functionLoss":  0,
+                  "functionInvention":  0,
+                  "duplicateOwnership":  0,
+                  "emptyLeaves":  0,
+                  "oversizedLeaves":  0,
+                  "unresolvedTopology":  0,
+                  "constructionEligibility":  "PASS"
+              },
+    "leaves":  [
+                   {
+                       "parent":  "DATE_TIME-001",
+                       "leaf":  "DATE_TIME-001",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "DATE",
+                                         "DATEDIF",
+                                         "DATEVALUE",
+                                         "DAY",
+                                         "DAYS",
+                                         "DAYS360",
+                                         "EDATE",
+                                         "EOMONTH",
+                                         "HOUR",
+                                         "ISOWEEKNUM",
+                                         "MINUTE",
+                                         "MONTH",
+                                         "NETWORKDAYS",
+                                         "NETWORKDAYS.INTL",
+                                         "NOW",
+                                         "SECOND",
+                                         "TIME",
+                                         "TIMEVALUE",
+                                         "TODAY",
+                                         "WEEKDAY",
+                                         "WEEKNUM",
+                                         "WORKDAY",
+                                         "WORKDAY.INTL",
+                                         "YEAR",
+                                         "YEARFRAC"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOGICAL_INFO-001",
+                       "leaf":  "LOGICAL_INFO-001",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "AND",
+                                         "CELL",
+                                         "ERROR.TYPE",
+                                         "FALSE",
+                                         "IF",
+                                         "IFERROR",
+                                         "IFNA",
+                                         "IFS",
+                                         "INFO",
+                                         "ISBLANK",
+                                         "ISERR",
+                                         "ISERROR",
+                                         "ISEVEN",
+                                         "ISFORMULA",
+                                         "ISLOGICAL",
+                                         "ISNA",
+                                         "ISNONTEXT",
+                                         "ISNUMBER",
+                                         "ISODD",
+                                         "ISREF",
+                                         "NOT",
+                                         "OR",
+                                         "SWITCH",
+                                         "TRUE",
+                                         "XOR"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOGICAL_INFO-002",
+                       "leaf":  "LOGICAL_INFO-002",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  6,
+                       "functions":  [
+                                         "ISTEXT",
+                                         "N",
+                                         "NA",
+                                         "SHEET",
+                                         "SHEETS",
+                                         "TYPE"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-001",
+                       "leaf":  "LOOKUP_REFERENCE-001-CONTEXTUAL",
+                       "semantic":  "CONTEXTUAL",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "WORKBOOK_CONTEXT",
+                       "count":  4,
+                       "functions":  [
+                                         "FORMULATEXT",
+                                         "GETPIVOTDATA",
+                                         "HYPERLINK",
+                                         "RTD"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-001",
+                       "leaf":  "LOOKUP_REFERENCE-001-CORE",
+                       "semantic":  "CORE",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "VALUES + RANGES",
+                       "count":  3,
+                       "functions":  [
+                                         "CHOOSE",
+                                         "INDEX",
+                                         "TRANSPOSE"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-001",
+                       "leaf":  "LOOKUP_REFERENCE-001-DYNAMIC_ARRAY",
+                       "semantic":  "DYNAMIC_ARRAY",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "ARRAYS + SPILL_ENGINE",
+                       "count":  4,
+                       "functions":  [
+                                         "FILTER",
+                                         "SORT",
+                                         "SORTBY",
+                                         "UNIQUE"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-001",
+                       "leaf":  "LOOKUP_REFERENCE-001-LOOKUP",
+                       "semantic":  "LOOKUP",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "COMPARISON + RANGES",
+                       "count":  6,
+                       "functions":  [
+                                         "HLOOKUP",
+                                         "LOOKUP",
+                                         "MATCH",
+                                         "VLOOKUP",
+                                         "XLOOKUP",
+                                         "XMATCH"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-001",
+                       "leaf":  "LOOKUP_REFERENCE-001-REFERENCE",
+                       "semantic":  "REFERENCE",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "RANGES + WORKBOOK_CONTEXT",
+                       "count":  8,
+                       "functions":  [
+                                         "ADDRESS",
+                                         "AREAS",
+                                         "COLUMN",
+                                         "COLUMNS",
+                                         "INDIRECT",
+                                         "OFFSET",
+                                         "ROW",
+                                         "ROWS"
+                                     ]
+                   },
+                   {
+                       "parent":  "LOOKUP_REFERENCE-002",
+                       "leaf":  "LOOKUP_REFERENCE-002",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  12,
+                       "functions":  [
+                                         "CHOOSECOLS",
+                                         "CHOOSEROWS",
+                                         "DROP",
+                                         "EXPAND",
+                                         "HSTACK",
+                                         "SEQUENCE",
+                                         "TAKE",
+                                         "TOCOL",
+                                         "TOROW",
+                                         "VSTACK",
+                                         "WRAPCOLS",
+                                         "WRAPROWS"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-001",
+                       "leaf":  "MATH-001",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "ABS",
+                                         "ACOS",
+                                         "ACOSH",
+                                         "ACOT",
+                                         "ACOTH",
+                                         "AGGREGATE",
+                                         "ARABIC",
+                                         "ASIN",
+                                         "ASINH",
+                                         "ATAN",
+                                         "ATAN2",
+                                         "ATANH",
+                                         "BASE",
+                                         "CEILING",
+                                         "CEILING.MATH",
+                                         "CEILING.PRECISE",
+                                         "COMBIN",
+                                         "COMBINA",
+                                         "COS",
+                                         "COSH",
+                                         "COT",
+                                         "COTH",
+                                         "CSC",
+                                         "CSCH",
+                                         "DECIMAL"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-AGGREGATION",
+                       "semantic":  "AGGREGATION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  1,
+                       "functions":  [
+                                         "PRODUCT"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-LOG_EXP_POWER",
+                       "semantic":  "LOG_EXP_POWER",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  5,
+                       "functions":  [
+                                         "EXP",
+                                         "LN",
+                                         "LOG",
+                                         "LOG10",
+                                         "POWER"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-MATH_CORE",
+                       "semantic":  "MATH_CORE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  7,
+                       "functions":  [
+                                         "FACT",
+                                         "FACTDOUBLE",
+                                         "GCD",
+                                         "LCM",
+                                         "MOD",
+                                         "MULTINOMIAL",
+                                         "QUOTIENT"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-RANDOM",
+                       "semantic":  "RANDOM",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  2,
+                       "functions":  [
+                                         "RAND",
+                                         "RANDBETWEEN"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-ROUNDING",
+                       "semantic":  "ROUNDING",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  7,
+                       "functions":  [
+                                         "EVEN",
+                                         "FLOOR",
+                                         "FLOOR.MATH",
+                                         "FLOOR.PRECISE",
+                                         "INT",
+                                         "MROUND",
+                                         "ODD"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-002",
+                       "leaf":  "MATH-002-TRIG",
+                       "semantic":  "TRIG",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  3,
+                       "functions":  [
+                                         "DEGREES",
+                                         "PI",
+                                         "RADIANS"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-AGGREGATION",
+                       "semantic":  "AGGREGATION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  7,
+                       "functions":  [
+                                         "SUBTOTAL",
+                                         "SUM",
+                                         "SUMPRODUCT",
+                                         "SUMSQ",
+                                         "SUMX2MY2",
+                                         "SUMX2PY2",
+                                         "SUMXMY2"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-CRITERIA",
+                       "semantic":  "CRITERIA",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  2,
+                       "functions":  [
+                                         "SUMIF",
+                                         "SUMIFS"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-LOG_EXP_POWER",
+                       "semantic":  "LOG_EXP_POWER",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  2,
+                       "functions":  [
+                                         "SQRT",
+                                         "SQRTPI"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-MATH_CORE",
+                       "semantic":  "MATH_CORE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  3,
+                       "functions":  [
+                                         "ROMAN",
+                                         "SERIESSUM",
+                                         "SIGN"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-ROUNDING",
+                       "semantic":  "ROUNDING",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  4,
+                       "functions":  [
+                                         "ROUND",
+                                         "ROUNDDOWN",
+                                         "ROUNDUP",
+                                         "TRUNC"
+                                     ]
+                   },
+                   {
+                       "parent":  "MATH-003",
+                       "leaf":  "MATH-003-TRIG",
+                       "semantic":  "TRIG",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  6,
+                       "functions":  [
+                                         "SEC",
+                                         "SECH",
+                                         "SIN",
+                                         "SINH",
+                                         "TAN",
+                                         "TANH"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-001",
+                       "leaf":  "SPECIALIZED-001",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "ACCRINT",
+                                         "ACCRINTM",
+                                         "AMORDEGRC",
+                                         "AMORLINC",
+                                         "COUPDAYBS",
+                                         "COUPDAYS",
+                                         "COUPDAYSNC",
+                                         "COUPNCD",
+                                         "COUPNUM",
+                                         "COUPPCD",
+                                         "CUMIPMT",
+                                         "CUMPRINC",
+                                         "DB",
+                                         "DDB",
+                                         "DISC",
+                                         "DOLLARDE",
+                                         "DOLLARFR",
+                                         "DURATION",
+                                         "EFFECT",
+                                         "FV",
+                                         "FVSCHEDULE",
+                                         "INTRATE",
+                                         "IPMT",
+                                         "IRR",
+                                         "ISPMT"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-002",
+                       "leaf":  "SPECIALIZED-002",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "MDURATION",
+                                         "MIRR",
+                                         "NOMINAL",
+                                         "NPER",
+                                         "NPV",
+                                         "ODDFPRICE",
+                                         "ODDFYIELD",
+                                         "ODDLPRICE",
+                                         "ODDLYIELD",
+                                         "PDURATION",
+                                         "PMT",
+                                         "PPMT",
+                                         "PRICE",
+                                         "PRICEDISC",
+                                         "PRICEMAT",
+                                         "PV",
+                                         "RATE",
+                                         "RECEIVED",
+                                         "RRI",
+                                         "SLN",
+                                         "SYD",
+                                         "TBILLEQ",
+                                         "TBILLPRICE",
+                                         "TBILLYIELD",
+                                         "VDB"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-003",
+                       "leaf":  "SPECIALIZED-003-DATABASE",
+                       "semantic":  "DATABASE",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "CRITERIA + RANGES + VALUES",
+                       "count":  12,
+                       "functions":  [
+                                         "DAVERAGE",
+                                         "DCOUNT",
+                                         "DCOUNTA",
+                                         "DGET",
+                                         "DMAX",
+                                         "DMIN",
+                                         "DPRODUCT",
+                                         "DSTDEV",
+                                         "DSTDEVP",
+                                         "DSUM",
+                                         "DVAR",
+                                         "DVARP"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-003",
+                       "leaf":  "SPECIALIZED-003-ENGINEERING",
+                       "semantic":  "ENGINEERING",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "VALUES + COERCION",
+                       "count":  8,
+                       "functions":  [
+                                         "BESSELI",
+                                         "BESSELJ",
+                                         "BESSELK",
+                                         "BESSELY",
+                                         "BIN2DEC",
+                                         "BIN2HEX",
+                                         "BIN2OCT",
+                                         "BITAND"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-003",
+                       "leaf":  "SPECIALIZED-003-FINANCIAL",
+                       "semantic":  "FINANCIAL",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "VALUES + COERCION + DATE_ENGINE",
+                       "count":  3,
+                       "functions":  [
+                                         "XNPV",
+                                         "YIELDDISC",
+                                         "YIELDMAT"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-003",
+                       "leaf":  "SPECIALIZED-003-ITERATIVE_FINANCIAL",
+                       "semantic":  "ITERATIVE_FINANCIAL",
+                       "origin":  "FRESH_EYE_ADMITTED",
+                       "certification":  "006.A.2C_ACCEPT",
+                       "dependency":  "VALUES + COERCION + DATE_ENGINE + NUMERICAL_SOLVER",
+                       "count":  2,
+                       "functions":  [
+                                         "XIRR",
+                                         "YIELD"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-004",
+                       "leaf":  "SPECIALIZED-004",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "BITLSHIFT",
+                                         "BITOR",
+                                         "BITRSHIFT",
+                                         "BITXOR",
+                                         "COMPLEX",
+                                         "CONVERT",
+                                         "DEC2BIN",
+                                         "DEC2HEX",
+                                         "DEC2OCT",
+                                         "DELTA",
+                                         "ERF",
+                                         "ERF.PRECISE",
+                                         "ERFC",
+                                         "ERFC.PRECISE",
+                                         "GESTEP",
+                                         "HEX2BIN",
+                                         "HEX2DEC",
+                                         "HEX2OCT",
+                                         "IMABS",
+                                         "IMAGINARY",
+                                         "IMARGUMENT",
+                                         "IMCONJUGATE",
+                                         "IMCOS",
+                                         "IMCOSH",
+                                         "IMCOT"
+                                     ]
+                   },
+                   {
+                       "parent":  "SPECIALIZED-005",
+                       "leaf":  "SPECIALIZED-005",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  21,
+                       "functions":  [
+                                         "IMCSC",
+                                         "IMCSCH",
+                                         "IMDIV",
+                                         "IMEXP",
+                                         "IMLN",
+                                         "IMLOG10",
+                                         "IMLOG2",
+                                         "IMPOWER",
+                                         "IMPRODUCT",
+                                         "IMREAL",
+                                         "IMSEC",
+                                         "IMSECH",
+                                         "IMSIN",
+                                         "IMSINH",
+                                         "IMSQRT",
+                                         "IMSUB",
+                                         "IMSUM",
+                                         "IMTAN",
+                                         "OCT2BIN",
+                                         "OCT2DEC",
+                                         "OCT2HEX"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-COUNTING",
+                       "semantic":  "COUNTING",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  3,
+                       "functions":  [
+                                         "COUNT",
+                                         "COUNTA",
+                                         "COUNTBLANK"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-CRITERIA",
+                       "semantic":  "CRITERIA",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  4,
+                       "functions":  [
+                                         "AVERAGEIF",
+                                         "AVERAGEIFS",
+                                         "COUNTIF",
+                                         "COUNTIFS"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-DISTRIBUTION",
+                       "semantic":  "DISTRIBUTION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  7,
+                       "functions":  [
+                                         "BETA.DIST",
+                                         "BETA.INV",
+                                         "BINOM.DIST",
+                                         "BINOM.INV",
+                                         "CHISQ.DIST",
+                                         "CHISQ.INV",
+                                         "CHISQ.TEST"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-REGRESSION",
+                       "semantic":  "REGRESSION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  1,
+                       "functions":  [
+                                         "CORREL"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-STAT_CORE",
+                       "semantic":  "STAT_CORE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  9,
+                       "functions":  [
+                                         "AVERAGE",
+                                         "AVERAGEA",
+                                         "BINOM.DIST.RANGE",
+                                         "CHISQ.DIST.RT",
+                                         "CHISQ.INV.RT",
+                                         "CONFIDENCE.NORM",
+                                         "CONFIDENCE.T",
+                                         "COVARIANCE.P",
+                                         "COVARIANCE.S"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-001",
+                       "leaf":  "STATISTICAL-001-VARIANCE",
+                       "semantic":  "VARIANCE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  1,
+                       "functions":  [
+                                         "AVEDEV"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-002",
+                       "leaf":  "STATISTICAL-002-DISTRIBUTION",
+                       "semantic":  "DISTRIBUTION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  11,
+                       "functions":  [
+                                         "EXPON.DIST",
+                                         "F.DIST",
+                                         "F.INV",
+                                         "F.TEST",
+                                         "GAMMA",
+                                         "GAMMA.DIST",
+                                         "GAMMA.INV",
+                                         "GAMMALN",
+                                         "GAMMALN.PRECISE",
+                                         "GAUSS",
+                                         "HYPGEOM.DIST"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-002",
+                       "leaf":  "STATISTICAL-002-RANKING",
+                       "semantic":  "RANKING",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  1,
+                       "functions":  [
+                                         "LARGE"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-002",
+                       "leaf":  "STATISTICAL-002-REGRESSION",
+                       "semantic":  "REGRESSION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  4,
+                       "functions":  [
+                                         "FORECAST.LINEAR",
+                                         "GROWTH",
+                                         "INTERCEPT",
+                                         "LINEST"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-002",
+                       "leaf":  "STATISTICAL-002-STAT_CORE",
+                       "semantic":  "STAT_CORE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  7,
+                       "functions":  [
+                                         "F.DIST.RT",
+                                         "F.INV.RT",
+                                         "FISHER",
+                                         "FISHERINV",
+                                         "FREQUENCY",
+                                         "GEOMEAN",
+                                         "HARMEAN"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-002",
+                       "leaf":  "STATISTICAL-002-VARIANCE",
+                       "semantic":  "VARIANCE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  2,
+                       "functions":  [
+                                         "DEVSQ",
+                                         "KURT"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-003",
+                       "leaf":  "STATISTICAL-003",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "LOGEST",
+                                         "LOGNORM.DIST",
+                                         "LOGNORM.INV",
+                                         "MAX",
+                                         "MAXA",
+                                         "MAXIFS",
+                                         "MEDIAN",
+                                         "MIN",
+                                         "MINA",
+                                         "MINIFS",
+                                         "MODE.MULT",
+                                         "MODE.SNGL",
+                                         "NEGBINOM.DIST",
+                                         "NORM.DIST",
+                                         "NORM.INV",
+                                         "NORM.S.DIST",
+                                         "NORM.S.INV",
+                                         "PEARSON",
+                                         "PERCENTILE.EXC",
+                                         "PERCENTILE.INC",
+                                         "PERCENTRANK.EXC",
+                                         "PERCENTRANK.INC",
+                                         "PERMUT",
+                                         "PERMUTATIONA",
+                                         "PHI"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-004",
+                       "leaf":  "STATISTICAL-004-DISTRIBUTION",
+                       "semantic":  "DISTRIBUTION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  5,
+                       "functions":  [
+                                         "POISSON.DIST",
+                                         "PROB",
+                                         "T.DIST",
+                                         "T.INV",
+                                         "T.TEST"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-004",
+                       "leaf":  "STATISTICAL-004-RANKING",
+                       "semantic":  "RANKING",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  5,
+                       "functions":  [
+                                         "QUARTILE.EXC",
+                                         "QUARTILE.INC",
+                                         "RANK.AVG",
+                                         "RANK.EQ",
+                                         "SMALL"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-004",
+                       "leaf":  "STATISTICAL-004-REGRESSION",
+                       "semantic":  "REGRESSION",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  4,
+                       "functions":  [
+                                         "RSQ",
+                                         "SLOPE",
+                                         "STEYX",
+                                         "TREND"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-004",
+                       "leaf":  "STATISTICAL-004-STAT_CORE",
+                       "semantic":  "STAT_CORE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  5,
+                       "functions":  [
+                                         "STANDARDIZE",
+                                         "T.DIST.2T",
+                                         "T.DIST.RT",
+                                         "T.INV.2T",
+                                         "TRIMMEAN"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-004",
+                       "leaf":  "STATISTICAL-004-VARIANCE",
+                       "semantic":  "VARIANCE",
+                       "origin":  "PRESERVED_BLUEPRINT",
+                       "certification":  "006.A.2_VALIDATED",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  6,
+                       "functions":  [
+                                         "SKEW",
+                                         "SKEW.P",
+                                         "STDEV.P",
+                                         "STDEV.S",
+                                         "STDEVA",
+                                         "STDEVPA"
+                                     ]
+                   },
+                   {
+                       "parent":  "STATISTICAL-005",
+                       "leaf":  "STATISTICAL-005",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  6,
+                       "functions":  [
+                                         "VAR.P",
+                                         "VAR.S",
+                                         "VARA",
+                                         "VARPA",
+                                         "WEIBULL.DIST",
+                                         "Z.TEST"
+                                     ]
+                   },
+                   {
+                       "parent":  "TEXT-001",
+                       "leaf":  "TEXT-001",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  25,
+                       "functions":  [
+                                         "ASC",
+                                         "BAHTTEXT",
+                                         "CHAR",
+                                         "CLEAN",
+                                         "CODE",
+                                         "CONCAT",
+                                         "CONCATENATE",
+                                         "DOLLAR",
+                                         "EXACT",
+                                         "FIND",
+                                         "FINDB",
+                                         "FIXED",
+                                         "LEFT",
+                                         "LEFTB",
+                                         "LEN",
+                                         "LENB",
+                                         "LOWER",
+                                         "MID",
+                                         "MIDB",
+                                         "NUMBERVALUE",
+                                         "PHONETIC",
+                                         "PROPER",
+                                         "REPLACE",
+                                         "REPLACEB",
+                                         "REPT"
+                                     ]
+                   },
+                   {
+                       "parent":  "TEXT-002",
+                       "leaf":  "TEXT-002",
+                       "semantic":  "DIRECT",
+                       "origin":  "005.C_BUILD",
+                       "certification":  "005.C",
+                       "dependency":  "PARENT_CONTRACT",
+                       "count":  13,
+                       "functions":  [
+                                         "RIGHT",
+                                         "RIGHTB",
+                                         "SEARCH",
+                                         "SEARCHB",
+                                         "SUBSTITUTE",
+                                         "T",
+                                         "TEXT",
+                                         "TEXTJOIN",
+                                         "TRIM",
+                                         "UNICHAR",
+                                         "UNICODE",
+                                         "UPPER",
+                                         "VALUE"
+                                     ]
+                   }
+               ]
+}
