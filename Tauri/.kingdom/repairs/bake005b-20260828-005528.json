@@ -1,0 +1,74 @@
+﻿{
+    "schema":  "kingdom-builder/tornado-repair-v2",
+    "bake":  "005.B",
+    "ancestor":  "ca917e2205012be966e0e298c5f91506c1ac5e79",
+    "repairFossils":  [
+                          {
+                              "node":  "VALUES",
+                              "fossil":  "1d221d6306a48f73d2b990aa8b134fdff330dd56",
+                              "subject":  "Reinforce spreadsheet value semantics"
+                          },
+                          {
+                              "node":  "COERCION",
+                              "fossil":  "a83b0677136674aa550dcbc84df28081b62ba74f",
+                              "subject":  "Reinforce spreadsheet coercion laws"
+                          },
+                          {
+                              "node":  "CRITERIA",
+                              "fossil":  "bd9461e0743c4952a4dab0c23af73a44f9cb5e07",
+                              "subject":  "Reinforce spreadsheet criteria laws"
+                          },
+                          {
+                              "node":  "ARRAYS",
+                              "fossil":  "12bb1605b099a20f16196d197796560692b56a40",
+                              "subject":  "Reinforce spreadsheet array geometry"
+                          },
+                          {
+                              "node":  "COMPARISON",
+                              "fossil":  "9042380f721782d4c83bce41e17758d1e4021d9d",
+                              "subject":  "Reinforce spreadsheet comparison laws"
+                          },
+                          {
+                              "node":  "WORKBOOK_CONTEXT",
+                              "fossil":  "dac4f200f8b9f5ec04e293099507c28a9698220f",
+                              "subject":  "Build formula workbook context pipe"
+                          },
+                          {
+                              "node":  "SPILL_ENGINE",
+                              "fossil":  "91a468bfc74f239b3a6e244102086d8c02580d30",
+                              "subject":  "Build dynamic array spill engine"
+                          },
+                          {
+                              "node":  "DATE_ENGINE",
+                              "fossil":  "4d5e62d6b1275470fa9c647bf83b7a0362e7de99",
+                              "subject":  "Build Excel date serial engine"
+                          },
+                          {
+                              "node":  "NUMERICAL_SOLVER",
+                              "fossil":  "f5be29394a244ec90b49a341ff1a8bd5f412a7b0",
+                              "subject":  "Build reusable numerical solver utility"
+                          },
+                          {
+                              "node":  "COMPLEX_ENGINE",
+                              "fossil":  "9021a98d7b090a8489e5580151ee0678bdc21569",
+                              "subject":  "Build complex number utility engine"
+                          }
+                      ],
+    "repairCount":  10,
+    "validation":  {
+                       "gitFossils":  "PASS",
+                       "patchIdentity":  "PASS",
+                       "rootTypeScript":  "PASS",
+                       "rootBuild":  "PASS"
+                   },
+    "falseLanding":  {
+                         "preserved":  true,
+                         "tag":  "archaeology/005B-false-landing",
+                         "fossil":  "8523fd457c9cdd0c02d534784251e39b09d3b0ce"
+                     },
+    "implementationStorm":  "NOT_IGNITED",
+    "repartition":  "PENDING",
+    "selfCertification":  false,
+    "reinspectionRequired":  true,
+    "nextStage":  "005.C"
+}
