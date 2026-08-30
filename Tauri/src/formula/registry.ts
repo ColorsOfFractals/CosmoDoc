@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave007fWorker36 } from "./implementations/wave007f-worker36-avedev";
 import { definitions as wave007fWorker34 } from "./implementations/wave007f-worker34-correl";
 import { definitions as wave007fWorker11 } from "./implementations/wave007f-worker11-product";
 import { definitions as math002Trig } from "./implementations/math-002-trig";
@@ -27,6 +28,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave007fWorker34) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave007fWorker36) {
     registry.register(definition);
   }
 
