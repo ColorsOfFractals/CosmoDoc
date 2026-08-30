@@ -1,0 +1,40 @@
+﻿{
+    "schema":  "cosmodoc.kingdom.worker-admission.v1",
+    "kingdom":  "CosmoDoc",
+    "bake":  "006.B.2A",
+    "subject":  {
+                    "parent":  "MATH-002",
+                    "leaf":  "MATH-002/TRIG",
+                    "functions":  [
+                                      "DEGREES",
+                                      "PI",
+                                      "RADIANS"
+                                  ]
+                },
+    "ancestry":  {
+                     "protectedFossil":  "46188f257c64a8327c87d4ce418cf570d4068420",
+                     "workerFossil":  "e9442afebfd1f30b2e1a15cec28869d8058345be",
+                     "workerParent":  "46188f257c64a8327c87d4ce418cf570d4068420",
+                     "patchId":  "1bf0cef1340cedfa7a0ec7079818a9cded1ec9cf"
+                 },
+    "proof":  {
+                  "workerCommitExists":  "PASS",
+                  "directAncestry":  "PASS",
+                  "patchScope":  "1/1",
+                  "productionFile":  "Tauri/src/formula/implementations/math-002-trig.ts",
+                  "usbKOwnership":  "3/3",
+                  "projectTypeScriptReplay":  "PASS",
+                  "semanticReplay":  "PASS",
+                  "fixedOracles":  "PASS",
+                  "roundTripSweep":  "PASS",
+                  "invalidCallRejection":  "9/9",
+                  "kingdomNonMutation":  "PASS"
+              },
+    "authority":  {
+                      "workerSelfCertification":  "NOT_ACCEPTED",
+                      "eyeAdmission":  "ADMITTED",
+                      "stitchAuthority":  "AUTHORIZED_FOR_THIS_EXACT_PATCH",
+                      "broaderPureWorkforce":  "NOT_CLAIMED",
+                      "contextualConstruction":  "HELD"
+                  }
+}
