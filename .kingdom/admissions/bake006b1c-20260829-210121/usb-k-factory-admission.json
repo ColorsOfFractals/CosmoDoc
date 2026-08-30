@@ -1,0 +1,48 @@
+{
+    "bake":  "006.B.1C",
+    "title":  "USB-K Factory Admission",
+    "ancestor":  "80007c8459c04dc9e699de196fea4d8317faa72e",
+    "evidence":  {
+                     "certifiedLeaves":  50,
+                     "certifiedFunctions":  432,
+                     "ownershipDuplicates":  0,
+                     "physicalAddresses":  50,
+                     "addressCollisions":  0,
+                     "runtimeDefinitions":  432,
+                     "runtimeUniqueNames":  432,
+                     "registryRetrievable":  432,
+                     "runtimeReplay":  "PASS",
+                     "containmentReplay":  "PASS"
+                 },
+    "usbK":  {
+                 "connector":  "FunctionDefinition[]",
+                 "assemblyBus":  "FunctionRegistry",
+                 "geometry":  "ADMITTED"
+             },
+    "admittedClaims":  [
+                           "UNIQUE_LEAF_SURFACES",
+                           "FUNCTION_DEFINITION_ARRAY_CONNECTOR",
+                           "FUNCTION_REGISTRY_ASSEMBLY_BUS",
+                           "DETERMINISTIC_ASSEMBLY_GEOMETRY",
+                           "ISOLATED_MANUFACTURING"
+                       ],
+    "excludedClaims":  [
+                           "SPREADSHEET_FUNCTION_SEMANTICS",
+                           "WORKER_IMPLEMENTATION_CORRECTNESS",
+                           "CONTEXTUAL_EVALUATION_SUFFICIENCY",
+                           "SYNTHETIC_EVALUATORS_AS_REAL_CODE"
+                       ],
+    "contextualRuntime":  {
+                              "status":  "UNRESOLVED",
+                              "constructionAuthority":  "PURE_LEAVES_ONLY",
+                              "reason":  "FormulaContext exists separately from the current argument-only CosmoFunction evaluation contract."
+                          },
+    "authority":  {
+                      "physicalFactoryGeometry":  "ADMITTED",
+                      "realImplementationConstruction":  "CONDITIONALLY_AUTHORIZED",
+                      "pureLeafPilot":  "AUTHORIZED",
+                      "contextualLeaves":  "HELD",
+                      "spreadsheetSemantics":  "NOT_CLAIMED"
+                  },
+    "next":  "006.B.2 PURE LEAF IMPLEMENTATION PILOT"
+}
