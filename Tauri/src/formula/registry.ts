@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave008MathSweep } from "./implementations/wave008-math-sweep";
 import { definitions as wave007fWorker14 } from "./implementations/wave007f-worker14-random";
 import { definitions as wave007fWorker38 } from "./implementations/wave007f-worker38-large";
 import { definitions as wave007fWorker36 } from "./implementations/wave007f-worker36-avedev";
@@ -42,6 +43,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave007fWorker14) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave008MathSweep) {
     registry.register(definition);
   }
 
