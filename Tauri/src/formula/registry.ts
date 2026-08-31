@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave013EngineeringBase } from "./implementations/wave013-engineering-base";
 import { definitions as wave012TextInfo } from "./implementations/wave012-text-info";
 import { definitions as wave011MathLeftovers } from "./implementations/wave011-math-leftovers";
 import { definitions as wave010Statistics } from "./implementations/wave010-statistics";
@@ -67,6 +68,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave012TextInfo) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave013EngineeringBase) {
     registry.register(definition);
   }
 
