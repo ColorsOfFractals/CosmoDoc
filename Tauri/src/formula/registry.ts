@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave021DescriptiveStats } from "./implementations/wave021-descriptive-stats";
 import { definitions as wave020RegressionStats } from "./implementations/wave020-regression-stats";
 import { definitions as wave019StatisticalProbability } from "./implementations/wave019-statistical-probability";
 import { definitions as wave018DistributionsII } from "./implementations/wave018-distributions-ii";
@@ -107,6 +108,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave020RegressionStats) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave021DescriptiveStats) {
     registry.register(definition);
   }
 
