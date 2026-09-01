@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave031EngineeringRemaining } from "./implementations/wave031-engineering-remaining";
 import { definitions as wave030ComplexEngineering } from "./implementations/wave030-complex-engineering";
 import { definitions as wave029MathStatUtilities } from "./implementations/wave029-math-stat-utilities";
 import { definitions as wave028LegacyStatisticsII } from "./implementations/wave028-legacy-statistics-ii";
@@ -157,6 +158,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave030ComplexEngineering) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave031EngineeringRemaining) {
     registry.register(definition);
   }
 
