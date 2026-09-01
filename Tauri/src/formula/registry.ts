@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave023RankingPercentiles } from "./implementations/wave023-ranking-percentiles";
 import { definitions as wave022NumericUtilities } from "./implementations/wave022-numeric-utilities";
 import { definitions as wave021DescriptiveStats } from "./implementations/wave021-descriptive-stats";
 import { definitions as wave020RegressionStats } from "./implementations/wave020-regression-stats";
@@ -117,6 +118,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave022NumericUtilities) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave023RankingPercentiles) {
     registry.register(definition);
   }
 
