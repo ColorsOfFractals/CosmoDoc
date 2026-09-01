@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave018DistributionsII } from "./implementations/wave018-distributions-ii";
 import { definitions as wave017Distributions } from "./implementations/wave017-distributions";
 import { definitions as wave016FinancialII } from "./implementations/wave016-financial-ii";
 import { definitions as wave015Financial } from "./implementations/wave015-financial";
@@ -92,6 +93,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave017Distributions) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave018DistributionsII) {
     registry.register(definition);
   }
 
