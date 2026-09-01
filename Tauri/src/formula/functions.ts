@@ -1,3 +1,4 @@
+import type { FormulaEvaluationContext } from "./glass";
 /**
  * CosmoDoc function-registry boundary.
  *
@@ -9,7 +10,10 @@ export type FunctionArgument = unknown;
 export type FunctionResult = unknown;
 
 export type CosmoFunction =
-  (args: FunctionArgument[]) => FunctionResult;
+  (
+    args: FunctionArgument[],
+    context?: FormulaEvaluationContext
+  ) => FunctionResult;
 
 export interface FunctionDefinition {
   name: string;
