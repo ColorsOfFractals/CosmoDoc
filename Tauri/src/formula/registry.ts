@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave028LegacyStatisticsII } from "./implementations/wave028-legacy-statistics-ii";
 import { definitions as wave027ValueUtilities } from "./implementations/wave027-value-utilities";
 import { definitions as wave026MathCore } from "./implementations/wave026-math-core";
 import { definitions as wave025LegacyStatistics } from "./implementations/wave025-legacy-statistics";
@@ -142,6 +143,10 @@ export function createFunctionRegistry(): FunctionRegistry {
   }
 
   for (const definition of wave027ValueUtilities) {
+    registry.register(definition);
+  }
+
+  for (const definition of wave028LegacyStatisticsII) {
     registry.register(definition);
   }
 
