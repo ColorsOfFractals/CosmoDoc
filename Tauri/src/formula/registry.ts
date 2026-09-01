@@ -1,4 +1,5 @@
 import { FunctionRegistry } from "./functions";
+import { definitions as wave032BigGapSweep } from "./implementations/wave032-big-gap-sweep";
 import { definitions as wave031EngineeringRemaining } from "./implementations/wave031-engineering-remaining";
 import { definitions as wave030ComplexEngineering } from "./implementations/wave030-complex-engineering";
 import { definitions as wave029MathStatUtilities } from "./implementations/wave029-math-stat-utilities";
@@ -165,5 +166,8 @@ export function createFunctionRegistry(): FunctionRegistry {
     registry.register(definition);
   }
 
+  for (const definition of wave032BigGapSweep) {
+    registry.register(definition);
+  }
   return registry;
 }
