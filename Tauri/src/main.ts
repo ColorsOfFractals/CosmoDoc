@@ -13,10 +13,22 @@ let currentPath: string | null = null;
 let currentFileName = "Untitled.xlsx";
 let activeSheetName = "Sheet1";
 
-const cellValues = new Map<string, string>();
+interface SheetState {
+  name: string;
+  cellValues: Map<string, string>;
+  columnWidths: Map<number, number>;
+  rowHeights: Map<number, number>;
+}
 
-const columnWidths = new Map<number, number>();
-const rowHeights = new Map<number, number>();
+let loadedWorkbook: ExcelJS.Workbook | null = null;
+
+const sheetStates =
+  new Map<string, SheetState>();
+
+let cellValues = new Map<string, string>();
+
+let columnWidths = new Map<number, number>();
+let rowHeights = new Map<number, number>();
 
 function excelColumnWidthToPixels(width: number): number {
   return Math.max(48, Math.round(width * 7 + 12));
@@ -210,7 +222,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </main>
 
     <footer class="statusbar">
-      <div class="sheet-tabs">
+      <div id="sheetTabs" class="sheet-tabs">
         <button id="sheetTab" class="sheet-tab active">
           Sheet1
         </button>
@@ -243,8 +255,6 @@ const workbookName =
 const dirtyState =
   document.querySelector<HTMLElement>("#dirtyState")!;
 
-const sheetTab =
-  document.querySelector<HTMLButtonElement>("#sheetTab")!;
 
 const themePicker =
   document.querySelector<HTMLDivElement>("#themePicker")!;
@@ -498,99 +508,238 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+function captureCurrentSheetState(): void {
+  if (!activeSheetName) return;
+
+  sheetStates.set(activeSheetName, {
+    name: activeSheetName,
+    cellValues,
+    columnWidths,
+    rowHeights
+  });
+}
+
+function renderSheetTabs(): void {
+  const host =
+    document.querySelector<HTMLDivElement>("#sheetTabs");
+
+  if (!host) return;
+
+  host.innerHTML = "";
+
+  for (const state of sheetStates.values()) {
+    const button =
+      document.createElement("button");
+
+    button.className =
+      state.name === activeSheetName
+        ? "sheet-tab active"
+        : "sheet-tab";
+
+    button.textContent = state.name;
+
+    button.addEventListener("click", () => {
+      captureCurrentSheetState();
+      activateSheet(state.name);
+    });
+
+    host.appendChild(button);
+  }
+
+  const add =
+    document.createElement("button");
+
+  add.className = "add-sheet";
+  add.textContent = "+";
+  add.title = "Add worksheet (coming next)";
+
+  host.appendChild(add);
+}
+
+function activateSheet(name: string): void {
+  const state = sheetStates.get(name);
+
+  if (!state) {
+    throw new Error(
+      `Unknown worksheet: ${name}`
+    );
+  }
+
+  activeSheetName = name;
+  cellValues = state.cellValues;
+  columnWidths = state.columnWidths;
+  rowHeights = state.rowHeights;
+
+  activeCell = "A1";
+
+  refreshGrid();
+  renderSheetTabs();
+
+  statusText.textContent =
+    `XLSX ONLINE // ${activeSheetName}`;
+}
+
+function importWorksheetState(
+  worksheet: ExcelJS.Worksheet
+): SheetState {
+  const values =
+    new Map<string, string>();
+
+  const widths =
+    new Map<number, number>();
+
+  const heights =
+    new Map<number, number>();
+
+  for (let col = 1; col <= COLS; col++) {
+    const width =
+      worksheet.getColumn(col).width;
+
+    if (typeof width === "number") {
+      widths.set(
+        col,
+        excelColumnWidthToPixels(width)
+      );
+    }
+  }
+
+  for (let row = 1; row <= ROWS; row++) {
+    const height =
+      worksheet.getRow(row).height;
+
+    if (typeof height === "number") {
+      heights.set(
+        row,
+        excelRowHeightToPixels(height)
+      );
+    }
+  }
+
+  worksheet.eachRow(
+    { includeEmpty: false },
+    (row, rowNumber) => {
+      row.eachCell(
+        { includeEmpty: false },
+        (cell, colNumber) => {
+          const id =
+            `${columnName(colNumber - 1)}${rowNumber}`;
+
+          let value = "";
+
+          if (
+            typeof cell.value === "object" &&
+            cell.value !== null &&
+            "formula" in cell.value
+          ) {
+            value =
+              `=${String(cell.value.formula)}`;
+          } else if (cell.value !== null) {
+            value =
+              String(cell.text ?? cell.value);
+          }
+
+          values.set(id,value);
+        }
+      );
+    }
+  );
+
+  return {
+    name: worksheet.name,
+    cellValues: values,
+    columnWidths: widths,
+    rowHeights: heights
+  };
+}
+
+function writeSheetStateToWorksheet(
+  state: SheetState,
+  worksheet: ExcelJS.Worksheet
+): void {
+  for (const [id,value] of state.cellValues) {
+    if (value.startsWith("=")) {
+      worksheet.getCell(id).value = {
+        formula: value.substring(1)
+      };
+    } else {
+      worksheet.getCell(id).value = value;
+    }
+  }
+}
 async function loadWorkbook(path: string): Promise<void> {
   try {
     statusText.textContent = "READING XLSX...";
 
     const bytes = await readFile(path);
 
-    const workbook = new ExcelJS.Workbook();
+    const workbook =
+      new ExcelJS.Workbook();
 
     await workbook.xlsx.load(bytes);
 
-    const worksheet = workbook.worksheets[0];
-
-    if (!worksheet) {
-      throw new Error("Workbook contains no worksheets.");
+    if (!workbook.worksheets.length) {
+      throw new Error(
+        "Workbook contains no worksheets."
+      );
     }
 
-    cellValues.clear();
-    columnWidths.clear();
-    rowHeights.clear();
+    loadedWorkbook = workbook;
+    sheetStates.clear();
 
-    for (let col = 1; col <= COLS; col++) {
-      const excelWidth = worksheet.getColumn(col).width;
+    for (
+      const worksheet of workbook.worksheets
+    ) {
+      const state =
+        importWorksheetState(worksheet);
 
-      if (typeof excelWidth === "number") {
-        columnWidths.set(
-          col,
-          excelColumnWidthToPixels(excelWidth)
-        );
-      }
+      sheetStates.set(
+        state.name,
+        state
+      );
     }
 
-    for (let row = 1; row <= ROWS; row++) {
-      const excelHeight = worksheet.getRow(row).height;
+    const first =
+      workbook.worksheets[0];
 
-      if (typeof excelHeight === "number") {
-        rowHeights.set(
-          row,
-          excelRowHeightToPixels(excelHeight)
-        );
-      }
+    const firstState =
+      sheetStates.get(first.name);
+
+    if (!firstState) {
+      throw new Error(
+        "Failed to import first worksheet."
+      );
     }
-
-    worksheet.eachRow(
-      { includeEmpty: false },
-      (row, rowNumber) => {
-
-        row.eachCell(
-          { includeEmpty: false },
-          (cell, colNumber) => {
-
-            const id =
-              `${columnName(colNumber - 1)}${rowNumber}`;
-
-            let value = "";
-
-            if (
-              cell.value !== null &&
-              cell.value !== undefined
-            ) {
-              if (
-                typeof cell.value === "object" &&
-                "formula" in cell.value
-              ) {
-                value = `=${cell.value.formula}`;
-              } else {
-                value = cell.text;
-              }
-            }
-
-            cellValues.set(id, value);
-          }
-        );
-      }
-    );
 
     currentPath = path;
 
     currentFileName =
-      path.split(/[\\/]/).pop() ?? "Workbook.xlsx";
+      path.split(/[\\/]/).pop() ??
+      "Workbook.xlsx";
 
-    activeSheetName = worksheet.name;
+    workbookName.textContent =
+      currentFileName;
 
-    workbookName.textContent = currentFileName;
-    sheetTab.textContent = activeSheetName;
+    activeSheetName =
+      first.name;
+
+    cellValues =
+      firstState.cellValues;
+
+    columnWidths =
+      firstState.columnWidths;
+
+    rowHeights =
+      firstState.rowHeights;
 
     activeCell = "A1";
 
     refreshGrid();
+    renderSheetTabs();
 
     dirtyState.textContent = "LOADED";
-    statusText.textContent =
-      `XLSX ONLINE // ${activeSheetName}`;
 
+    statusText.textContent =
+      `XLSX ONLINE // ${activeSheetName} // ${workbook.worksheets.length} SHEETS`;
   } catch (error) {
     console.error(error);
 
@@ -642,20 +791,33 @@ document
     try {
       statusText.textContent = "FORGING XLSX...";
 
-      const workbook = new ExcelJS.Workbook();
+      captureCurrentSheetState();
 
-      const worksheet =
-        workbook.addWorksheet(activeSheetName);
+      const workbook =
+        loadedWorkbook ??
+        new ExcelJS.Workbook();
 
-      for (const [id, value] of cellValues) {
-
-        if (value.startsWith("=")) {
-          worksheet.getCell(id).value = {
-            formula: value.substring(1)
-          };
-        } else {
-          worksheet.getCell(id).value = value;
+      if (!loadedWorkbook) {
+        for (const state of sheetStates.values()) {
+          if (!workbook.getWorksheet(state.name)) {
+            workbook.addWorksheet(state.name);
+          }
         }
+
+        if (!workbook.worksheets.length) {
+          workbook.addWorksheet(activeSheetName);
+        }
+      }
+
+      for (const state of sheetStates.values()) {
+        const worksheet =
+          workbook.getWorksheet(state.name) ??
+          workbook.addWorksheet(state.name);
+
+        writeSheetStateToWorksheet(
+          state,
+          worksheet
+        );
       }
 
       const buffer =
