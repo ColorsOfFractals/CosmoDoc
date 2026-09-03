@@ -1037,11 +1037,29 @@ function evaluateWorkbookExpression(
 
     const args =
       argumentSources.map(
-        argument =>
-          evaluateWorkbookExpression(
-            argument,
-            stack
-          )
+        argument => {
+          const value =
+            evaluateWorkbookExpression(
+              argument,
+              stack
+            );
+
+          /*
+           * XLSX ranges arrive from the workbook bridge as
+           * a 2D row/column matrix.
+           *
+           * Production functions already know how to operate
+           * on value collections, but their historical flatten
+           * helpers are not uniform. Normalize the workbook
+           * boundary once rather than patching individual
+           * spreadsheet functions.
+           */
+          if (Array.isArray(value)) {
+            return value.flat(Infinity);
+          }
+
+          return value;
+        }
       );
 
     return evaluateRegisteredFunction(
