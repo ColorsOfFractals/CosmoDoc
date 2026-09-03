@@ -675,7 +675,99 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#039;");
 }
 
+interface WorksheetMergeDisplay {
+  master: string;
+  startRow: number;
+  endRow: number;
+  startColumn: number;
+  endColumn: number;
+}
+
+function buildWorksheetMergeLookup():
+  Map<string, WorksheetMergeDisplay> {
+  const lookup =
+    new Map<string, WorksheetMergeDisplay>();
+
+  if (!loadedWorkbook) {
+    return lookup;
+  }
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(activeSheetName);
+
+  if (!worksheet) {
+    return lookup;
+  }
+
+  const model =
+    worksheet.model as any;
+
+  const ranges: unknown[] =
+    Array.isArray(model?.merges)
+      ? model.merges
+      : [];
+
+  for (const rawRange of ranges) {
+    const range =
+      String(rawRange);
+
+    const parts =
+      range.split(":");
+
+    if (parts.length !== 2) {
+      continue;
+    }
+
+    const start =
+      worksheet.getCell(parts[0]);
+
+    const end =
+      worksheet.getCell(parts[1]);
+
+    const merge: WorksheetMergeDisplay = {
+      master: start.address,
+      startRow: Number(start.row),
+      endRow: Number(end.row),
+      startColumn: Number(start.col),
+      endColumn: Number(end.col)
+    };
+
+    const firstRow =
+      Math.max(1,merge.startRow);
+
+    const lastRow =
+      Math.min(ROWS,merge.endRow);
+
+    const firstColumn =
+      Math.max(1,merge.startColumn);
+
+    const lastColumn =
+      Math.min(COLS,merge.endColumn);
+
+    for (
+      let row = firstRow;
+      row <= lastRow;
+      row++
+    ) {
+      for (
+        let column = firstColumn;
+        column <= lastColumn;
+        column++
+      ) {
+        const id =
+          `${columnName(column - 1)}${row}`;
+
+        lookup.set(id,merge);
+      }
+    }
+  }
+
+  return lookup;
+}
 function renderGrid(): string {
+  const mergeLookup =
+    buildWorksheetMergeLookup();
+
   let html = `
     <div
       class="corner"
@@ -714,14 +806,34 @@ function renderGrid(): string {
       const id = `${columnName(col)}${row}`;
       const value = cellValues.get(id) ?? "";
 
+      const merge =
+        mergeLookup.get(id);
+
+      if (
+        merge &&
+        merge.master !== id
+      ) {
+        continue;
+      }
+
+      const gridColumn =
+        merge
+          ? `${merge.startColumn + 1} / ${merge.endColumn + 2}`
+          : `${col + 2}`;
+
+      const gridRow =
+        merge
+          ? `${merge.startRow + 1} / ${merge.endRow + 2}`
+          : `${row + 1}`;
+
       html += `
         <div
-          class="cell"
+          class="cell${merge ? " merged-cell" : ""}"
           data-cell="${id}"
           tabindex="0"
           style="
-            grid-column: ${col + 2};
-            grid-row: ${row + 1};
+            grid-column: ${gridColumn};
+            grid-row: ${gridRow};
           "
         >
           ${escapeHtml(value)}

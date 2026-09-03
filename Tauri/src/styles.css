@@ -1654,3 +1654,8 @@ body.column-resizing * {
   min-height: 0;
   max-height: none;
 }
+/* CosmoDoc Bake 041 — native XLSX merge mirror */
+.cell.merged-cell {
+  position: relative;
+  z-index: 2;
+}
