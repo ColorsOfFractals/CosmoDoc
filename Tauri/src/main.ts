@@ -615,34 +615,42 @@ function renderWorksheetImages(): void {
   grid.appendChild(layer);
 }
 function applyWorkbookGeometry(): void {
-  for (let col = 0; col < COLS; col++) {
-    const gridColumn = col + 2;
-    const width = columnWidths.get(col + 1) ?? 118;
+  const columns = [
+    "48px",
+    ...Array.from(
+      { length: COLS },
+      (_, index) =>
+        `${columnWidths.get(index + 1) ?? DEFAULT_COLUMN_WIDTH}px`
+    )
+  ];
 
-    document
-      .querySelectorAll<HTMLElement>(
-        `.cell[style*="grid-column: ${gridColumn};"], .column-header[style*="grid-column: ${gridColumn};"]`
-      )
-      .forEach((element) => {
-        element.style.width = `${width}px`;
-        element.style.minWidth = `${width}px`;
-        element.style.maxWidth = `${width}px`;
-      });
-  }
+  const rows = [
+    "32px",
+    ...Array.from(
+      { length: ROWS },
+      (_, index) =>
+        `${rowHeights.get(index + 1) ?? 32}px`
+    )
+  ];
 
-  for (let row = 1; row <= ROWS; row++) {
-    const gridRow = row + 1;
-    const height = rowHeights.get(row) ?? 32;
+  grid.style.gridTemplateColumns =
+    columns.join(" ");
 
-    document
-      .querySelectorAll<HTMLElement>(
-        `.cell[style*="grid-row: ${gridRow};"], .row-header[style*="grid-row: ${gridRow};"]`
-      )
-      .forEach((element) => {
-        element.style.height = `${height}px`;
-        element.style.minHeight = `${height}px`;
-      });
-  }
+  grid.style.gridTemplateRows =
+    rows.join(" ");
+
+  grid.style.gridAutoColumns =
+    `${DEFAULT_COLUMN_WIDTH}px`;
+
+  grid.style.gridAutoRows =
+    "32px";
+
+  grid.style.width =
+    `${columns.reduce(
+      (total, value) =>
+        total + Number.parseFloat(value),
+      0
+    )}px`;
 }
 
 function columnName(index: number): string {
