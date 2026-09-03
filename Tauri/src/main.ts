@@ -1394,6 +1394,286 @@ function workbookDisplayValue(
   }
 }
 
+/* ============================================================
+   CosmoDoc Bake 047 — native XLSX cell style mirror
+
+   ExcelJS retained workbook remains the style authority.
+
+   Mirrored:
+     font
+     fill
+     borders
+     alignment
+     wrapText
+
+   Geometry, merges, formulas and numFmt remain independent.
+   ============================================================ */
+
+function workbookArgbToCss(
+  color: any
+): string | undefined {
+  if (!color) {
+    return undefined;
+  }
+
+  if (
+    typeof color.argb === "string" &&
+    /^[0-9A-F]{8}$/i.test(color.argb)
+  ) {
+    const argb =
+      color.argb.toUpperCase();
+
+    const alpha =
+      parseInt(argb.slice(0, 2), 16) / 255;
+
+    const red =
+      parseInt(argb.slice(2, 4), 16);
+
+    const green =
+      parseInt(argb.slice(4, 6), 16);
+
+    const blue =
+      parseInt(argb.slice(6, 8), 16);
+
+    if (alpha >= 0.999) {
+      return `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+  }
+
+  return undefined;
+}
+
+function workbookBorderStyleCss(
+  style: string | undefined
+): string {
+  switch (style) {
+    case "hair":
+      return "1px solid";
+
+    case "thin":
+      return "1px solid";
+
+    case "medium":
+      return "2px solid";
+
+    case "thick":
+      return "3px solid";
+
+    case "double":
+      return "3px double";
+
+    case "dotted":
+      return "1px dotted";
+
+    case "dashed":
+      return "1px dashed";
+
+    case "dashDot":
+    case "dashDotDot":
+      return "1px dashed";
+
+    case "mediumDashed":
+    case "mediumDashDot":
+    case "mediumDashDotDot":
+      return "2px dashed";
+
+    default:
+      return "1px solid";
+  }
+}
+
+function workbookBorderSideCss(
+  side: any
+): string | undefined {
+  if (!side?.style) {
+    return undefined;
+  }
+
+  const color =
+    workbookArgbToCss(side.color) ??
+    "currentColor";
+
+  return `${workbookBorderStyleCss(side.style)} ${color}`;
+}
+
+function workbookCellStyleCss(
+  address: string
+): string {
+  if (!loadedWorkbook) {
+    return "";
+  }
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(
+      activeSheetName
+    );
+
+  if (!worksheet) {
+    return "";
+  }
+
+  const cell =
+    worksheet.getCell(address);
+
+  const css: string[] = [];
+
+  const font =
+    cell.font as any;
+
+  if (font) {
+    if (
+      typeof font.name === "string" &&
+      font.name.trim() !== ""
+    ) {
+      css.push(
+        `font-family:${JSON.stringify(font.name)}`
+      );
+    }
+
+    if (
+      typeof font.size === "number" &&
+      Number.isFinite(font.size)
+    ) {
+      css.push(
+        `font-size:${font.size}pt`
+      );
+    }
+
+    if (font.bold === true) {
+      css.push("font-weight:700");
+    }
+
+    if (font.italic === true) {
+      css.push("font-style:italic");
+    }
+
+    if (font.underline) {
+      css.push("text-decoration:underline");
+    }
+
+    const fontColor =
+      workbookArgbToCss(font.color);
+
+    if (fontColor) {
+      css.push(`color:${fontColor}`);
+    }
+  }
+
+  const fill =
+    cell.fill as any;
+
+  if (
+    fill?.type === "pattern" &&
+    fill.pattern === "solid"
+  ) {
+    const fillColor =
+      workbookArgbToCss(
+        fill.fgColor
+      );
+
+    if (fillColor) {
+      css.push(
+        `background-color:${fillColor}`
+      );
+    }
+  }
+
+  const border =
+    cell.border as any;
+
+  if (border) {
+    const top =
+      workbookBorderSideCss(border.top);
+
+    const right =
+      workbookBorderSideCss(border.right);
+
+    const bottom =
+      workbookBorderSideCss(border.bottom);
+
+    const left =
+      workbookBorderSideCss(border.left);
+
+    if (top) {
+      css.push(`border-top:${top}`);
+    }
+
+    if (right) {
+      css.push(`border-right:${right}`);
+    }
+
+    if (bottom) {
+      css.push(`border-bottom:${bottom}`);
+    }
+
+    if (left) {
+      css.push(`border-left:${left}`);
+    }
+  }
+
+  const alignment =
+    cell.alignment as any;
+
+  if (alignment) {
+    switch (alignment.horizontal) {
+      case "left":
+        css.push("text-align:left");
+        break;
+
+      case "center":
+      case "centerContinuous":
+        css.push("text-align:center");
+        break;
+
+      case "right":
+        css.push("text-align:right");
+        break;
+
+      case "justify":
+      case "distributed":
+        css.push("text-align:justify");
+        break;
+    }
+
+    switch (alignment.vertical) {
+      case "top":
+        css.push("align-items:flex-start");
+        break;
+
+      case "middle":
+        css.push("align-items:center");
+        break;
+
+      case "bottom":
+        css.push("align-items:flex-end");
+        break;
+
+      case "justify":
+      case "distributed":
+        css.push("align-items:center");
+        break;
+    }
+
+    if (alignment.wrapText === true) {
+      css.push("white-space:normal");
+      css.push("overflow-wrap:anywhere");
+    }
+
+    if (
+      typeof alignment.indent === "number" &&
+      alignment.indent > 0
+    ) {
+      css.push(
+        `padding-left:${8 + alignment.indent * 12}px`
+      );
+    }
+  }
+
+  return css.join(";");
+}
+
 function renderGrid(): string {
   const mergeLookup =
     buildWorksheetMergeLookup();
@@ -1438,6 +1718,8 @@ function renderGrid(): string {
       const displayValue =
         workbookDisplayValue(id, value);
 
+      const cellStyle =
+        workbookCellStyleCss(id);
       const merge =
         mergeLookup.get(id);
 
@@ -1466,6 +1748,7 @@ function renderGrid(): string {
           style="
             grid-column: ${gridColumn};
             grid-row: ${gridRow};
+      ${cellStyle}
           "
         >
           ${escapeHtml(displayValue)}
