@@ -1659,3 +1659,44 @@ body.column-resizing * {
   position: relative;
   z-index: 2;
 }
+/* CosmoDoc Bake 049RR — interactive worksheet images */
+
+.worksheet-image-interactive {
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.worksheet-image-interactive.worksheet-image-dragging {
+  cursor: grabbing;
+}
+
+.worksheet-image-selected {
+  outline: 2px solid #46d9ff;
+  outline-offset: 2px;
+}
+
+.worksheet-image-resize-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid #07111f;
+  background: #46d9ff;
+  border-radius: 2px;
+  cursor: nwse-resize;
+  pointer-events: auto;
+  touch-action: none;
+  display: none;
+  z-index: 20;
+}
+
+.worksheet-image-resize-handle.active {
+  display: block;
+}
+
+.worksheet-image-resizing {
+  outline: 2px solid #46d9ff;
+  outline-offset: 2px;
+}

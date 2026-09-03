@@ -42,6 +42,7 @@ function excelRowHeightToPixels(height: number): number {
 const MIN_COLUMN_WIDTH = 48;
 const MAX_COLUMN_WIDTH = 520;
 const DEFAULT_COLUMN_WIDTH = 118;
+const DEFAULT_ROW_HEIGHT = 32;
 const COLUMN_TEXT_PADDING = 28;
 
 function clampColumnWidth(width: number): number {
@@ -111,6 +112,7 @@ function autoFitColumn(column: number): void {
 
   applyWorkbookGeometry();
   renderWorksheetImages();
+  installWorksheetImageInteractions();
   captureCurrentSheetState();
 
   dirtyState.textContent = "MODIFIED";
@@ -184,6 +186,7 @@ function installColumnResizeHandles(): void {
 
               applyWorkbookGeometry();
               renderWorksheetImages();
+  installWorksheetImageInteractions();
             };
 
           const onUp = () => {
@@ -1930,12 +1933,460 @@ const currentTheme =
 themeButtonLabel.textContent =
   themeLabels[currentTheme] ?? themeLabels.cosmic;
 
+/* ============================================================
+   CosmoDoc Bake 049RR — interactive worksheet images
+   ============================================================ */
+
+interface WorksheetPixelCoordinate {
+  column: number;
+  row: number;
+}
+
+function worksheetImageCoordinateFromPixels(
+  x: number,
+  y: number
+): WorksheetPixelCoordinate {
+  let remainingX = Math.max(0, x);
+  let column = 0;
+
+  for (let index = 1; index <= COLS; index++) {
+    const width =
+      columnWidths.get(index) ??
+      DEFAULT_COLUMN_WIDTH;
+
+    if (remainingX <= width) {
+      column =
+        (index - 1) +
+        remainingX / width;
+      break;
+    }
+
+    remainingX -= width;
+    column = index;
+  }
+
+  let remainingY = Math.max(0, y);
+  let row = 0;
+
+  for (let index = 1; index <= ROWS; index++) {
+    const height =
+      rowHeights.get(index) ??
+      DEFAULT_ROW_HEIGHT;
+
+    if (remainingY <= height) {
+      row =
+        (index - 1) +
+        remainingY / height;
+      break;
+    }
+
+    remainingY -= height;
+    row = index;
+  }
+
+  return { column, row };
+}
+
+function updateWorksheetImageAnchor(
+  media: any,
+  left: number,
+  top: number,
+  width: number,
+  height: number
+): void {
+  const range = media?.range as any;
+
+  if (!range?.tl) return;
+
+  const topLeft =
+    worksheetImageCoordinateFromPixels(
+      left,
+      top
+    );
+
+  range.tl.col = topLeft.column;
+  range.tl.row = topLeft.row;
+
+  if (range.ext) {
+    range.ext.width =
+      Math.max(48, width);
+
+    range.ext.height =
+      Math.max(48, height);
+
+    return;
+  }
+
+  if (range.br) {
+    const bottomRight =
+      worksheetImageCoordinateFromPixels(
+        left + width,
+        top + height
+      );
+
+    range.br.col = bottomRight.column;
+    range.br.row = bottomRight.row;
+  }
+}
+
+function installWorksheetImageInteractions(): void {
+  if (!loadedWorkbook) return;
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(
+      activeSheetName
+    );
+
+  if (!worksheet) return;
+
+  const media = worksheet.getImages();
+
+  const images =
+    Array.from(
+      document.querySelectorAll<HTMLImageElement>(
+        ".worksheet-image"
+      )
+    );
+
+  images.forEach((image, index) => {
+    if (
+      image.dataset.cosmoInteractive ===
+      "true"
+    ) {
+      return;
+    }
+
+    const imageMedia = media[index] as any;
+    if (!imageMedia) return;
+
+    const layer = image.parentElement;
+    if (!layer) return;
+
+    image.dataset.cosmoInteractive = "true";
+    image.classList.add("worksheet-image-interactive");
+    image.draggable = false;
+
+    const handle =
+      document.createElement("div");
+
+    handle.className =
+      "worksheet-image-resize-handle";
+
+    handle.title =
+      "Drag to resize image";
+
+    layer.appendChild(handle);
+
+    const syncHandle = (): void => {
+      handle.style.left =
+        `${image.offsetLeft +
+           image.offsetWidth - 7}px`;
+
+      handle.style.top =
+        `${image.offsetTop +
+           image.offsetHeight - 7}px`;
+    };
+
+    const selectImage = (): void => {
+      document
+        .querySelectorAll(
+          ".worksheet-image-selected"
+        )
+        .forEach(element =>
+          element.classList.remove(
+            "worksheet-image-selected"
+          )
+        );
+
+      document
+        .querySelectorAll(
+          ".worksheet-image-resize-handle.active"
+        )
+        .forEach(element =>
+          element.classList.remove("active")
+        );
+
+      image.classList.add(
+        "worksheet-image-selected"
+      );
+
+      handle.classList.add("active");
+      syncHandle();
+    };
+
+    syncHandle();
+
+    image.addEventListener(
+      "click",
+      event => {
+        event.stopPropagation();
+        selectImage();
+      }
+    );
+
+    image.addEventListener(
+      "pointerdown",
+      event => {
+        if (event.button !== 0) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        selectImage();
+
+        const startPointerX =
+          event.clientX;
+
+        const startPointerY =
+          event.clientY;
+
+        const startLeft =
+          image.offsetLeft;
+
+        const startTop =
+          image.offsetTop;
+
+        const width =
+          image.offsetWidth;
+
+        const height =
+          image.offsetHeight;
+
+        image.setPointerCapture(
+          event.pointerId
+        );
+
+        image.classList.add(
+          "worksheet-image-dragging"
+        );
+
+        const onMove =
+          (moveEvent: PointerEvent): void => {
+            const left =
+              Math.max(
+                0,
+                startLeft +
+                moveEvent.clientX -
+                startPointerX
+              );
+
+            const top =
+              Math.max(
+                0,
+                startTop +
+                moveEvent.clientY -
+                startPointerY
+              );
+
+            image.style.left = `${left}px`;
+            image.style.top = `${top}px`;
+
+            syncHandle();
+          };
+
+        const finish =
+          (finishEvent: PointerEvent): void => {
+            image.removeEventListener(
+              "pointermove",
+              onMove
+            );
+
+            image.removeEventListener(
+              "pointerup",
+              finish
+            );
+
+            image.removeEventListener(
+              "pointercancel",
+              finish
+            );
+
+            image.classList.remove(
+              "worksheet-image-dragging"
+            );
+
+            try {
+              image.releasePointerCapture(
+                finishEvent.pointerId
+              );
+            } catch {}
+
+            updateWorksheetImageAnchor(
+              imageMedia,
+              image.offsetLeft,
+              image.offsetTop,
+              width,
+              height
+            );
+
+            dirtyState.textContent =
+              "MODIFIED";
+
+            statusText.textContent =
+              `IMAGE MOVED // ${activeSheetName}`;
+          };
+
+        image.addEventListener(
+          "pointermove",
+          onMove
+        );
+
+        image.addEventListener(
+          "pointerup",
+          finish
+        );
+
+        image.addEventListener(
+          "pointercancel",
+          finish
+        );
+      }
+    );
+
+    handle.addEventListener(
+      "pointerdown",
+      event => {
+        if (event.button !== 0) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        selectImage();
+
+        const startPointerX =
+          event.clientX;
+
+        const startPointerY =
+          event.clientY;
+
+        const startWidth =
+          image.offsetWidth;
+
+        const startHeight =
+          image.offsetHeight;
+
+        const aspect =
+          startHeight > 0
+            ? startWidth / startHeight
+            : 1;
+
+        handle.setPointerCapture(
+          event.pointerId
+        );
+
+        image.classList.add(
+          "worksheet-image-resizing"
+        );
+
+        const onMove =
+          (moveEvent: PointerEvent): void => {
+            let width =
+              Math.max(
+                48,
+                startWidth +
+                moveEvent.clientX -
+                startPointerX
+              );
+
+            let height =
+              Math.max(
+                48,
+                startHeight +
+                moveEvent.clientY -
+                startPointerY
+              );
+
+            if (moveEvent.shiftKey) {
+              if (
+                Math.abs(
+                  moveEvent.clientX -
+                  startPointerX
+                ) >=
+                Math.abs(
+                  moveEvent.clientY -
+                  startPointerY
+                )
+              ) {
+                height = width / aspect;
+              } else {
+                width = height * aspect;
+              }
+            }
+
+            image.style.width = `${width}px`;
+            image.style.height = `${height}px`;
+
+            syncHandle();
+          };
+
+        const finish =
+          (finishEvent: PointerEvent): void => {
+            handle.removeEventListener(
+              "pointermove",
+              onMove
+            );
+
+            handle.removeEventListener(
+              "pointerup",
+              finish
+            );
+
+            handle.removeEventListener(
+              "pointercancel",
+              finish
+            );
+
+            image.classList.remove(
+              "worksheet-image-resizing"
+            );
+
+            try {
+              handle.releasePointerCapture(
+                finishEvent.pointerId
+              );
+            } catch {}
+
+            updateWorksheetImageAnchor(
+              imageMedia,
+              image.offsetLeft,
+              image.offsetTop,
+              image.offsetWidth,
+              image.offsetHeight
+            );
+
+            dirtyState.textContent =
+              "MODIFIED";
+
+            statusText.textContent =
+              `IMAGE RESIZED // ${activeSheetName}`;
+          };
+
+        handle.addEventListener(
+          "pointermove",
+          onMove
+        );
+
+        handle.addEventListener(
+          "pointerup",
+          finish
+        );
+
+        handle.addEventListener(
+          "pointercancel",
+          finish
+        );
+      }
+    );
+  });
+}
+
 function refreshGrid(): void {
   grid.innerHTML = renderGrid();
   applyWorkbookGeometry();
   installColumnResizeHandles();
   selectCell(activeCell);
   renderWorksheetImages();
+  installWorksheetImageInteractions();
 }
 
 function selectCell(id: string): void {
@@ -2567,6 +3018,7 @@ async function importPhotoIntoWorksheet():
 
   clearWorksheetImageUrls();
   renderWorksheetImages();
+  installWorksheetImageInteractions();
 
   dirtyState.textContent =
     "MODIFIED";
