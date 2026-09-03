@@ -1609,3 +1609,34 @@ body.column-resizing * {
   cursor: col-resize !important;
   user-select: none !important;
 }
+/* CosmoDoc Bake 037 — worksheet image layer */
+
+.grid {
+  position: relative;
+}
+
+.worksheet-image-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.worksheet-image {
+  position: absolute;
+  display: block;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.column-header,
+.row-header,
+.corner {
+  position: relative;
+  z-index: 12;
+}
+
+.column-resize-handle {
+  z-index: 20;
+}

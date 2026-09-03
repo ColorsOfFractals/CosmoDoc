@@ -109,6 +109,7 @@ function autoFitColumn(column: number): void {
   );
 
   applyWorkbookGeometry();
+  renderWorksheetImages();
   captureCurrentSheetState();
 
   dirtyState.textContent = "MODIFIED";
@@ -181,6 +182,7 @@ function installColumnResizeHandles(): void {
               );
 
               applyWorkbookGeometry();
+              renderWorksheetImages();
             };
 
           const onUp = () => {
@@ -244,6 +246,373 @@ function autoFitImportedColumns(): void {
   }
 
   applyWorkbookGeometry();
+}
+const worksheetImageUrls =
+  new Map<string, string>();
+
+function clearWorksheetImageUrls(): void {
+  for (const url of worksheetImageUrls.values()) {
+    if (url.startsWith("blob:")) {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  worksheetImageUrls.clear();
+}
+
+function worksheetImageMime(
+  extension: unknown
+): string {
+  const ext =
+    String(extension ?? "png").toLowerCase();
+
+  if (ext === "jpg" || ext === "jpeg") {
+    return "image/jpeg";
+  }
+
+  if (ext === "gif") {
+    return "image/gif";
+  }
+
+  return "image/png";
+}
+
+function resolveWorksheetImageSource(
+  imageId: number
+): string | null {
+  if (!loadedWorkbook) {
+    return null;
+  }
+
+  const key =
+    `${currentFileName}:${imageId}`;
+
+  const cached =
+    worksheetImageUrls.get(key);
+
+  if (cached) {
+    return cached;
+  }
+
+  const image =
+    loadedWorkbook.getImage(imageId) as any;
+
+  if (!image) {
+    return null;
+  }
+
+  if (typeof image.base64 === "string") {
+    const source =
+      image.base64.startsWith("data:")
+        ? image.base64
+        : `data:${worksheetImageMime(image.extension)};base64,${image.base64}`;
+
+    worksheetImageUrls.set(
+      key,
+      source
+    );
+
+    return source;
+  }
+
+  if (image.buffer) {
+    let bytes: Uint8Array;
+
+    if (image.buffer instanceof Uint8Array) {
+      bytes =
+        new Uint8Array(image.buffer);
+    } else if (
+      image.buffer instanceof ArrayBuffer
+    ) {
+      bytes =
+        new Uint8Array(image.buffer);
+    } else {
+      bytes =
+        new Uint8Array(image.buffer);
+    }
+
+    const copy =
+      new Uint8Array(bytes.byteLength);
+
+    copy.set(bytes);
+
+    const blob =
+      new Blob(
+        [copy.buffer],
+        {
+          type:
+            worksheetImageMime(
+              image.extension
+            )
+        }
+      );
+
+    const source =
+      URL.createObjectURL(blob);
+
+    worksheetImageUrls.set(
+      key,
+      source
+    );
+
+    return source;
+  }
+
+  return null;
+}
+
+function worksheetAnchorCoordinate(
+  anchor: any
+): {
+  column: number;
+  row: number;
+} {
+  const column =
+    Number(
+      anchor?.col ??
+      anchor?.nativeCol ??
+      0
+    );
+
+  const row =
+    Number(
+      anchor?.row ??
+      anchor?.nativeRow ??
+      0
+    );
+
+  return {
+    column:
+      Number.isFinite(column)
+        ? Math.max(0,column)
+        : 0,
+
+    row:
+      Number.isFinite(row)
+        ? Math.max(0,row)
+        : 0
+  };
+}
+
+function worksheetImagePoint(
+  column: number,
+  row: number
+): {
+  x: number;
+  y: number;
+} {
+  const firstCell =
+    document.querySelector<HTMLElement>(
+      '[data-cell="A1"]'
+    );
+
+  if (!firstCell) {
+    return {
+      x: 0,
+      y: 0
+    };
+  }
+
+  let x =
+    firstCell.offsetLeft;
+
+  let y =
+    firstCell.offsetTop;
+
+  const wholeColumn =
+    Math.floor(column);
+
+  const columnFraction =
+    column - wholeColumn;
+
+  const wholeRow =
+    Math.floor(row);
+
+  const rowFraction =
+    row - wholeRow;
+
+  for (
+    let index = 1;
+    index <= wholeColumn;
+    index++
+  ) {
+    x +=
+      columnWidths.get(index) ??
+      DEFAULT_COLUMN_WIDTH;
+  }
+
+  if (wholeColumn < COLS) {
+    x +=
+      columnFraction *
+      (
+        columnWidths.get(
+          wholeColumn + 1
+        ) ??
+        DEFAULT_COLUMN_WIDTH
+      );
+  }
+
+  for (
+    let index = 1;
+    index <= wholeRow;
+    index++
+  ) {
+    y +=
+      rowHeights.get(index) ??
+      32;
+  }
+
+  if (wholeRow < ROWS) {
+    y +=
+      rowFraction *
+      (
+        rowHeights.get(
+          wholeRow + 1
+        ) ??
+        32
+      );
+  }
+
+  return { x,y };
+}
+
+function renderWorksheetImages(): void {
+  document
+    .querySelectorAll(
+      ".worksheet-image-layer"
+    )
+    .forEach(
+      (element) => element.remove()
+    );
+
+  if (!loadedWorkbook) {
+    return;
+  }
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(
+      activeSheetName
+    );
+
+  if (!worksheet) {
+    return;
+  }
+
+  const images =
+    worksheet.getImages() as any[];
+
+  if (!images.length) {
+    return;
+  }
+
+  const layer =
+    document.createElement("div");
+
+  layer.className =
+    "worksheet-image-layer";
+
+  for (const worksheetImage of images) {
+    const source =
+      resolveWorksheetImageSource(
+        Number(worksheetImage.imageId)
+      );
+
+    if (!source) {
+      continue;
+    }
+
+    const range =
+      worksheetImage.range ?? {};
+
+    const startAnchor =
+      worksheetAnchorCoordinate(
+        range.tl ?? {}
+      );
+
+    const start =
+      worksheetImagePoint(
+        startAnchor.column,
+        startAnchor.row
+      );
+
+    let width = 160;
+    let height = 90;
+
+    if (range.br) {
+      const endAnchor =
+        worksheetAnchorCoordinate(
+          range.br
+        );
+
+      const end =
+        worksheetImagePoint(
+          endAnchor.column,
+          endAnchor.row
+        );
+
+      width =
+        Math.max(
+          1,
+          end.x - start.x
+        );
+
+      height =
+        Math.max(
+          1,
+          end.y - start.y
+        );
+    } else if (range.ext) {
+      const candidateWidth =
+        Number(range.ext.width);
+
+      const candidateHeight =
+        Number(range.ext.height);
+
+      if (
+        Number.isFinite(candidateWidth) &&
+        candidateWidth > 0
+      ) {
+        width =
+          candidateWidth;
+      }
+
+      if (
+        Number.isFinite(candidateHeight) &&
+        candidateHeight > 0
+      ) {
+        height =
+          candidateHeight;
+      }
+    }
+
+    const image =
+      document.createElement("img");
+
+    image.className =
+      "worksheet-image";
+
+    image.src =
+      source;
+
+    image.alt =
+      `Worksheet image ${worksheetImage.imageId}`;
+
+    image.style.left =
+      `${start.x}px`;
+
+    image.style.top =
+      `${start.y}px`;
+
+    image.style.width =
+      `${width}px`;
+
+    image.style.height =
+      `${height}px`;
+
+    layer.appendChild(image);
+  }
+
+  grid.appendChild(layer);
 }
 function applyWorkbookGeometry(): void {
   for (let col = 0; col < COLS; col++) {
@@ -531,6 +900,7 @@ function refreshGrid(): void {
   applyWorkbookGeometry();
   installColumnResizeHandles();
   selectCell(activeCell);
+  renderWorksheetImages();
 }
 
 function selectCell(id: string): void {
@@ -902,6 +1272,7 @@ async function loadWorkbook(path: string): Promise<void> {
       );
     }
 
+    clearWorksheetImageUrls();
     loadedWorkbook = workbook;
     sheetStates.clear();
 
