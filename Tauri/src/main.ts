@@ -1055,7 +1055,25 @@ function evaluateWorkbookExpression(
            * spreadsheet functions.
            */
           if (Array.isArray(value)) {
-            return value.flat(Infinity);
+            /*
+             * XLSX blank cells resolve as null.
+             *
+             * Spreadsheet aggregate functions treat true blank
+             * range material as absent rather than numeric input.
+             * Normalize that once at the workbook boundary.
+             *
+             * Text and numeric values remain untouched:
+             * COUNT can ignore text according to its own semantics,
+             * SUM receives actual range material without blank sentinels.
+             */
+            return value
+              .flat(Infinity)
+              .filter(
+                item =>
+                  item !== null &&
+                  item !== undefined &&
+                  item !== ""
+              );
           }
 
           return value;
