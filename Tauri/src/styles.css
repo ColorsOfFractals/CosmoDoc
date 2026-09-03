@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   font-family:
     "Cascadia Code",
     "Segoe UI",
@@ -1583,3 +1583,29 @@ body[data-theme="ancient"] {
   z-index: 3 !important;
 }
 
+
+/* CosmoDoc Bake 036 — column resize / AutoFit */
+.column-header {
+  position: relative;
+}
+
+.column-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+  user-select: none;
+}
+
+.column-resize-handle:hover {
+  background: rgba(85, 225, 255, 0.22);
+}
+
+body.column-resizing,
+body.column-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}

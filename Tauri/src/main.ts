@@ -38,6 +38,213 @@ function excelRowHeightToPixels(height: number): number {
   return Math.max(24, Math.round(height * 96 / 72));
 }
 
+const MIN_COLUMN_WIDTH = 48;
+const MAX_COLUMN_WIDTH = 520;
+const DEFAULT_COLUMN_WIDTH = 118;
+const COLUMN_TEXT_PADDING = 28;
+
+function clampColumnWidth(width: number): number {
+  return Math.max(
+    MIN_COLUMN_WIDTH,
+    Math.min(MAX_COLUMN_WIDTH, Math.round(width))
+  );
+}
+
+function measureColumnTextWidth(
+  column: number
+): number {
+  const canvas =
+    document.createElement("canvas");
+
+  const context =
+    canvas.getContext("2d");
+
+  if (!context) {
+    return DEFAULT_COLUMN_WIDTH;
+  }
+
+  const sampleCell =
+    document.querySelector<HTMLElement>(".cell");
+
+  const computed =
+    sampleCell
+      ? window.getComputedStyle(sampleCell)
+      : null;
+
+  context.font =
+    computed?.font ??
+    "14px monospace";
+
+  let widest =
+    context.measureText(
+      columnName(column - 1)
+    ).width;
+
+  for (let row = 1; row <= ROWS; row++) {
+    const id =
+      `${columnName(column - 1)}${row}`;
+
+    const value =
+      cellValues.get(id) ?? "";
+
+    if (!value) continue;
+
+    const measured =
+      context.measureText(value).width;
+
+    if (measured > widest) {
+      widest = measured;
+    }
+  }
+
+  return clampColumnWidth(
+    widest + COLUMN_TEXT_PADDING
+  );
+}
+
+function autoFitColumn(column: number): void {
+  columnWidths.set(
+    column,
+    measureColumnTextWidth(column)
+  );
+
+  applyWorkbookGeometry();
+  captureCurrentSheetState();
+
+  dirtyState.textContent = "MODIFIED";
+  statusText.textContent =
+    `COLUMN ${columnName(column - 1)} AUTOFIT`;
+}
+
+function installColumnResizeHandles(): void {
+  document
+    .querySelectorAll<HTMLElement>(".column-header")
+    .forEach((header, index) => {
+      const column = index + 1;
+
+      if (
+        header.querySelector(
+          ".column-resize-handle"
+        )
+      ) {
+        return;
+      }
+
+      const handle =
+        document.createElement("div");
+
+      handle.className =
+        "column-resize-handle";
+
+      handle.title =
+        "Drag to resize // Double-click to AutoFit";
+
+      handle.addEventListener(
+        "dblclick",
+        (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          autoFitColumn(column);
+        }
+      );
+
+      handle.addEventListener(
+        "mousedown",
+        (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const startX =
+            event.clientX;
+
+          const startWidth =
+            columnWidths.get(column) ??
+            header.getBoundingClientRect().width ??
+            DEFAULT_COLUMN_WIDTH;
+
+          document.body.classList.add(
+            "column-resizing"
+          );
+
+          const onMove =
+            (moveEvent: MouseEvent) => {
+              const width =
+                clampColumnWidth(
+                  startWidth +
+                  moveEvent.clientX -
+                  startX
+                );
+
+              columnWidths.set(
+                column,
+                width
+              );
+
+              applyWorkbookGeometry();
+            };
+
+          const onUp = () => {
+            window.removeEventListener(
+              "mousemove",
+              onMove
+            );
+
+            window.removeEventListener(
+              "mouseup",
+              onUp
+            );
+
+            document.body.classList.remove(
+              "column-resizing"
+            );
+
+            captureCurrentSheetState();
+
+            dirtyState.textContent =
+              "MODIFIED";
+
+            statusText.textContent =
+              `COLUMN ${columnName(column - 1)} RESIZED`;
+          };
+
+          window.addEventListener(
+            "mousemove",
+            onMove
+          );
+
+          window.addEventListener(
+            "mouseup",
+            onUp
+          );
+        }
+      );
+
+      header.appendChild(handle);
+    });
+}
+
+function autoFitImportedColumns(): void {
+  for (let column = 1; column <= COLS; column++) {
+    const contentWidth =
+      measureColumnTextWidth(column);
+
+    const importedWidth =
+      columnWidths.get(column) ??
+      DEFAULT_COLUMN_WIDTH;
+
+    columnWidths.set(
+      column,
+      clampColumnWidth(
+        Math.max(
+          importedWidth,
+          contentWidth
+        )
+      )
+    );
+  }
+
+  applyWorkbookGeometry();
+}
 function applyWorkbookGeometry(): void {
   for (let col = 0; col < COLS; col++) {
     const gridColumn = col + 2;
@@ -322,6 +529,7 @@ themeButtonLabel.textContent =
 function refreshGrid(): void {
   grid.innerHTML = renderGrid();
   applyWorkbookGeometry();
+  installColumnResizeHandles();
   selectCell(activeCell);
 }
 
@@ -573,6 +781,7 @@ function activateSheet(name: string): void {
   activeCell = "A1";
 
   refreshGrid();
+  autoFitImportedColumns();
   renderSheetTabs();
 
   statusText.textContent =
@@ -656,6 +865,16 @@ function writeSheetStateToWorksheet(
   state: SheetState,
   worksheet: ExcelJS.Worksheet
 ): void {
+  for (
+    const [column,width] of state.columnWidths
+  ) {
+    worksheet.getColumn(column).width =
+      Math.max(
+        1,
+        (width - 12) / 7
+      );
+  }
+
   for (const [id,value] of state.cellValues) {
     if (value.startsWith("=")) {
       worksheet.getCell(id).value = {
@@ -734,6 +953,7 @@ async function loadWorkbook(path: string): Promise<void> {
     activeCell = "A1";
 
     refreshGrid();
+    autoFitImportedColumns();
     renderSheetTabs();
 
     dirtyState.textContent = "LOADED";
