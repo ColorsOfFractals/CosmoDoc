@@ -1174,6 +1174,169 @@ function evaluateWorkbookFormula(
   );
 }
 
+/* ============================================================
+   CosmoDoc Bake 046 — XLSX formula number-format mirror
+
+   Formula source:
+       =SUM(...)
+
+   Runtime result:
+       0
+
+   XLSX numFmt:
+       "$"#,##0.00
+
+   Grid display:
+       $0.00
+   ============================================================ */
+
+function workbookCellNumberFormat(
+  address: string
+): string | undefined {
+  if (!loadedWorkbook) {
+    return undefined;
+  }
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(
+      activeSheetName
+    );
+
+  if (!worksheet) {
+    return undefined;
+  }
+
+  const format =
+    worksheet.getCell(address).numFmt;
+
+  if (
+    typeof format !== "string" ||
+    format.trim() === "" ||
+    format === "General"
+  ) {
+    return undefined;
+  }
+
+  return format;
+}
+
+function workbookFormatDecimalPlaces(
+  format: string
+): number {
+  /*
+   * Use the positive-number section of an Excel format.
+   * Example:
+   *
+   *   "$"#,##0.00;[Red]-"$"#,##0.00
+   *
+   * becomes:
+   *
+   *   "$"#,##0.00
+   */
+  const positive =
+    format.split(";")[0] ?? format;
+
+  const decimalMatch =
+    /\.([0#]+)/.exec(positive);
+
+  return decimalMatch
+    ? decimalMatch[1].length
+    : 0;
+}
+
+function formatWorkbookFormulaResult(
+  address: string,
+  value: number
+): string {
+  const format =
+    workbookCellNumberFormat(address);
+
+  if (!format) {
+    return String(value);
+  }
+
+  const positive =
+    format.split(";")[0] ?? format;
+
+  const decimals =
+    workbookFormatDecimalPlaces(format);
+
+  /*
+   * Percentage formats store 0.25 and display 25%.
+   */
+  if (positive.includes("%")) {
+    return (
+      (value * 100).toLocaleString(
+        undefined,
+        {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }
+      ) +
+      "%"
+    );
+  }
+
+  /*
+   * Currency/accounting-like formats.
+   *
+   * Preserve the symbol declared by the XLSX rather than
+   * assuming every workbook is USD.
+   */
+  const currencyMatch =
+    positive.match(
+      /[$€£¥₹]/
+    );
+
+  if (currencyMatch) {
+    const symbol =
+      currencyMatch[0];
+
+    const formatted =
+      Math.abs(value).toLocaleString(
+        undefined,
+        {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+          useGrouping: positive.includes(",")
+        }
+      );
+
+    return value < 0
+      ? `-${symbol}${formatted}`
+      : `${symbol}${formatted}`;
+  }
+
+  /*
+   * Standard decimal / thousands formatting.
+   *
+   * Examples:
+   *   0
+   *   0.00
+   *   #,##0
+   *   #,##0.00
+   */
+  if (
+    /[0#]/.test(positive)
+  ) {
+    return value.toLocaleString(
+      undefined,
+      {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+        useGrouping: positive.includes(",")
+      }
+    );
+  }
+
+  /*
+   * Unknown/custom format:
+   * preserve the calculated value rather than inventing
+   * presentation semantics.
+   */
+  return String(value);
+}
+
 function workbookDisplayValue(
   address: string,
   source: string
@@ -1206,6 +1369,13 @@ function workbookDisplayValue(
       !Number.isFinite(result)
     ) {
       return "#NUM!";
+    }
+
+    if (typeof result === "number") {
+      return formatWorkbookFormulaResult(
+        address,
+        result
+      );
     }
 
     return String(result);
