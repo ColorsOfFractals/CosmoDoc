@@ -2376,6 +2376,275 @@ async function loadWorkbook(path: string): Promise<void> {
   }
 }
 
+/* ============================================================
+   CosmoDoc Bake 048 — worksheet photo import
+
+   Flow:
+     selected cell
+       -> image picker
+       -> ExcelJS workbook image
+       -> active worksheet anchor
+       -> existing image renderer
+       -> ordinary XLSX save path
+
+   The retained ExcelJS workbook remains media authority.
+   ============================================================ */
+
+function worksheetImageExtension(
+  path: string
+): "png" | "jpeg" {
+  const extension =
+    path
+      .split(".")
+      .pop()
+      ?.toLowerCase();
+
+  if (extension === "png") {
+    return "png";
+  }
+
+  if (
+    extension === "jpg" ||
+    extension === "jpeg"
+  ) {
+    return "jpeg";
+  }
+
+  throw new Error(
+    `Unsupported image type: ${extension ?? "unknown"}`
+  );
+}
+
+function bytesToBase64(
+  bytes: Uint8Array
+): string {
+  /*
+   * Avoid spreading a large Uint8Array into
+   * String.fromCharCode(), which can blow the
+   * browser argument stack on real photos.
+   */
+  const chunkSize = 0x8000;
+  let binary = "";
+
+  for (
+    let offset = 0;
+    offset < bytes.length;
+    offset += chunkSize
+  ) {
+    const chunk =
+      bytes.subarray(
+        offset,
+        Math.min(
+          offset + chunkSize,
+          bytes.length
+        )
+      );
+
+    binary +=
+      String.fromCharCode(...chunk);
+  }
+
+  return btoa(binary);
+}
+
+function activeCellImageAnchor(): {
+  row: number;
+  column: number;
+} {
+  const match =
+    /^([A-Z]+)([1-9]\d*)$/i.exec(
+      activeCell
+    );
+
+  if (!match) {
+    throw new Error(
+      `Invalid active cell: ${activeCell}`
+    );
+  }
+
+  return {
+    /*
+     * ExcelJS image anchors are zero-based.
+     */
+    row: Number(match[2]) - 1,
+    column:
+      workbookColumnNumber(match[1]) - 1
+  };
+}
+
+async function importPhotoIntoWorksheet():
+  Promise<void> {
+  if (!loadedWorkbook) {
+    throw new Error(
+      "Open or create a workbook before importing a photo."
+    );
+  }
+
+  const worksheet =
+    loadedWorkbook.getWorksheet(
+      activeSheetName
+    );
+
+  if (!worksheet) {
+    throw new Error(
+      `Worksheet not found: ${activeSheetName}`
+    );
+  }
+
+  statusText.textContent =
+    "SELECTING PHOTO...";
+
+  const selected =
+    await open({
+      multiple: false,
+      directory: false,
+      filters: [
+        {
+          name: "Worksheet Image",
+          extensions: [
+            "png",
+            "jpg",
+            "jpeg"
+          ]
+        }
+      ]
+    });
+
+  if (!selected) {
+    statusText.textContent =
+      "PHOTO IMPORT CANCELLED";
+
+    return;
+  }
+
+  const path =
+    selected as string;
+
+  const extension =
+    worksheetImageExtension(path);
+
+  statusText.textContent =
+    "IMPORTING PHOTO...";
+
+  const bytes =
+    await readFile(path);
+
+  const base64 =
+    bytesToBase64(bytes);
+
+  const imageId =
+    loadedWorkbook.addImage({
+      base64:
+        `data:image/${extension};base64,${base64}`,
+      extension
+    });
+
+  const anchor =
+    activeCellImageAnchor();
+
+  /*
+   * First useful placement contract:
+   * anchor at the selected cell with a predictable
+   * 320x240 worksheet footprint.
+   *
+   * Resize/dragging can come later without changing
+   * the persistence architecture.
+   */
+  worksheet.addImage(
+    imageId,
+    {
+      tl: {
+        col: anchor.column,
+        row: anchor.row
+      },
+      ext: {
+        width: 320,
+        height: 240
+      },
+      editAs: "oneCell"
+    }
+  );
+
+  clearWorksheetImageUrls();
+  renderWorksheetImages();
+
+  dirtyState.textContent =
+    "MODIFIED";
+
+  statusText.textContent =
+    `PHOTO IMPORTED // ${activeSheetName} // ${activeCell}`;
+}
+
+function installPhotoImportButton(): void {
+  if (
+    document.querySelector(
+      "#photoImportButton"
+    )
+  ) {
+    return;
+  }
+
+  const saveButton =
+    document.querySelector<HTMLButtonElement>(
+      "#saveButton"
+    );
+
+  if (
+    !saveButton ||
+    !saveButton.parentElement
+  ) {
+    console.warn(
+      "Photo import button host not found."
+    );
+
+    return;
+  }
+
+  /*
+   * Clone the existing Save control so the button
+   * automatically inherits CosmoDoc's current UI
+   * structure/classes without adding CSS bureaucracy.
+   */
+  const button =
+    saveButton.cloneNode(
+      true
+    ) as HTMLButtonElement;
+
+  button.id =
+    "photoImportButton";
+
+  button.textContent =
+    "IMPORT PHOTO";
+
+  button.title =
+    "Import photo at selected cell";
+
+  button.removeAttribute(
+    "disabled"
+  );
+
+  button.addEventListener(
+    "click",
+    async () => {
+      try {
+        await importPhotoIntoWorksheet();
+      } catch (error) {
+        console.error(error);
+
+        dirtyState.textContent =
+          "FAULT";
+
+        statusText.textContent =
+          `PHOTO IMPORT FAILED // ${String(error)}`;
+      }
+    }
+  );
+
+  saveButton.before(button);
+}
+
+installPhotoImportButton();
+
 document
   .querySelector("#openButton")
   ?.addEventListener("click", async () => {
