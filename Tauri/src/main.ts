@@ -4,6 +4,7 @@ import ExcelJS from "exceljs";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { readFile, writeFile } from "@tauri-apps/plugin-fs";
 import { invoke } from "@tauri-apps/api/core";
+import { evaluateRegisteredFunction } from "./formula/engine";
 
 const ROWS = 100;
 const COLS = 26;
@@ -764,6 +765,429 @@ function buildWorksheetMergeLookup():
 
   return lookup;
 }
+/* ============================================================
+   CosmoDoc Bake 043 — live workbook formula bridge
+
+   Workbook source stays authoritative in cellValues:
+       =SUM(E5:E41)
+
+   Grid display receives the evaluated value:
+       0
+
+   Formula bar / editor still receive the original source.
+   ============================================================ */
+
+function workbookColumnNumber(name: string): number {
+  let result = 0;
+
+  for (const char of name.toUpperCase()) {
+    result =
+      result * 26 +
+      (char.charCodeAt(0) - 64);
+  }
+
+  return result;
+}
+
+function workbookColumnName(column: number): string {
+  let value = column;
+  let result = "";
+
+  while (value > 0) {
+    value -= 1;
+
+    result =
+      String.fromCharCode(
+        65 + (value % 26)
+      ) +
+      result;
+
+    value = Math.floor(value / 26);
+  }
+
+  return result;
+}
+
+function splitWorkbookArguments(
+  source: string
+): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index];
+
+    if (char === "(") {
+      depth += 1;
+      continue;
+    }
+
+    if (char === ")") {
+      depth -= 1;
+      continue;
+    }
+
+    if (char === "," && depth === 0) {
+      parts.push(
+        source.slice(start, index).trim()
+      );
+
+      start = index + 1;
+    }
+  }
+
+  parts.push(source.slice(start).trim());
+
+  return parts.filter(
+    part => part.length > 0
+  );
+}
+
+function findTopLevelOperator(
+  source: string,
+  operator: string
+): number {
+  let depth = 0;
+
+  for (let index = source.length - 1; index >= 0; index--) {
+    const char = source[index];
+
+    if (char === ")") {
+      depth += 1;
+      continue;
+    }
+
+    if (char === "(") {
+      depth -= 1;
+      continue;
+    }
+
+    if (
+      depth === 0 &&
+      char === operator
+    ) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+function workbookCellRuntimeValue(
+  address: string,
+  stack: Set<string>
+): unknown {
+  const normalized =
+    address.toUpperCase();
+
+  if (stack.has(normalized)) {
+    throw new Error(
+      `Circular formula reference: ${normalized}`
+    );
+  }
+
+  const source =
+    cellValues.get(normalized) ?? "";
+
+  if (source === "") {
+    return null;
+  }
+
+  if (source.startsWith("=")) {
+    stack.add(normalized);
+
+    try {
+      return evaluateWorkbookFormula(
+        source,
+        stack
+      );
+    } finally {
+      stack.delete(normalized);
+    }
+  }
+
+  const numeric =
+    Number(source);
+
+  if (
+    source.trim() !== "" &&
+    Number.isFinite(numeric)
+  ) {
+    return numeric;
+  }
+
+  return source;
+}
+
+function workbookRangeRuntimeValue(
+  startAddress: string,
+  endAddress: string,
+  stack: Set<string>
+): unknown[][] {
+  const start =
+    /^([A-Z]+)([1-9]\d*)$/i.exec(
+      startAddress
+    );
+
+  const end =
+    /^([A-Z]+)([1-9]\d*)$/i.exec(
+      endAddress
+    );
+
+  if (!start || !end) {
+    throw new Error(
+      `Invalid workbook range: ${startAddress}:${endAddress}`
+    );
+  }
+
+  const startColumn =
+    workbookColumnNumber(start[1]);
+
+  const endColumn =
+    workbookColumnNumber(end[1]);
+
+  const startRow =
+    Number(start[2]);
+
+  const endRow =
+    Number(end[2]);
+
+  const columnLow =
+    Math.min(startColumn, endColumn);
+
+  const columnHigh =
+    Math.max(startColumn, endColumn);
+
+  const rowLow =
+    Math.min(startRow, endRow);
+
+  const rowHigh =
+    Math.max(startRow, endRow);
+
+  const values: unknown[][] = [];
+
+  for (
+    let row = rowLow;
+    row <= rowHigh;
+    row++
+  ) {
+    const rowValues: unknown[] = [];
+
+    for (
+      let column = columnLow;
+      column <= columnHigh;
+      column++
+    ) {
+      const address =
+        `${workbookColumnName(column)}${row}`;
+
+      rowValues.push(
+        workbookCellRuntimeValue(
+          address,
+          stack
+        )
+      );
+    }
+
+    values.push(rowValues);
+  }
+
+  return values;
+}
+
+function evaluateWorkbookExpression(
+  rawSource: string,
+  stack: Set<string>
+): unknown {
+  let source =
+    rawSource.trim();
+
+  if (source.startsWith("=")) {
+    source =
+      source.substring(1).trim();
+  }
+
+  if (!source) {
+    return null;
+  }
+
+  /*
+   * Registered function call.
+   *
+   * Parsing the outer function first means:
+   *   SUM(E42*0.725)
+   *
+   * correctly sends E42*0.725 back through this
+   * expression evaluator as the function argument.
+   */
+  const functionMatch =
+    /^([A-Z][A-Z0-9.]*)\((.*)\)$/is.exec(
+      source
+    );
+
+  if (functionMatch) {
+    const name =
+      functionMatch[1].toUpperCase();
+
+    const argumentSources =
+      splitWorkbookArguments(
+        functionMatch[2]
+      );
+
+    const args =
+      argumentSources.map(
+        argument =>
+          evaluateWorkbookExpression(
+            argument,
+            stack
+          )
+      );
+
+    return evaluateRegisteredFunction(
+      name,
+      args
+    );
+  }
+
+  /*
+   * Multiplication is the only arithmetic operator
+   * required by the current real workbook.
+   */
+  const multiplyIndex =
+    findTopLevelOperator(source, "*");
+
+  if (multiplyIndex >= 0) {
+    const left =
+      evaluateWorkbookExpression(
+        source.slice(0, multiplyIndex),
+        stack
+      );
+
+    const right =
+      evaluateWorkbookExpression(
+        source.slice(multiplyIndex + 1),
+        stack
+      );
+
+    const leftNumber =
+      Number(left ?? 0);
+
+    const rightNumber =
+      Number(right ?? 0);
+
+    if (
+      !Number.isFinite(leftNumber) ||
+      !Number.isFinite(rightNumber)
+    ) {
+      throw new Error(
+        `Non-numeric multiplication: ${source}`
+      );
+    }
+
+    return leftNumber * rightNumber;
+  }
+
+  const rangeMatch =
+    /^([A-Z]+[1-9]\d*):([A-Z]+[1-9]\d*)$/i.exec(
+      source
+    );
+
+  if (rangeMatch) {
+    return workbookRangeRuntimeValue(
+      rangeMatch[1],
+      rangeMatch[2],
+      stack
+    );
+  }
+
+  const cellMatch =
+    /^[A-Z]+[1-9]\d*$/i.exec(
+      source
+    );
+
+  if (cellMatch) {
+    return workbookCellRuntimeValue(
+      source,
+      stack
+    );
+  }
+
+  const numeric =
+    Number(source);
+
+  if (
+    source !== "" &&
+    Number.isFinite(numeric)
+  ) {
+    return numeric;
+  }
+
+  throw new Error(
+    `Unsupported workbook expression: ${source}`
+  );
+}
+
+function evaluateWorkbookFormula(
+  source: string,
+  stack: Set<string> = new Set()
+): unknown {
+  return evaluateWorkbookExpression(
+    source,
+    stack
+  );
+}
+
+function workbookDisplayValue(
+  address: string,
+  source: string
+): string {
+  if (!source.startsWith("=")) {
+    return source;
+  }
+
+  try {
+    const stack =
+      new Set<string>([
+        address.toUpperCase()
+      ]);
+
+    const result =
+      evaluateWorkbookFormula(
+        source,
+        stack
+      );
+
+    if (
+      result === null ||
+      result === undefined
+    ) {
+      return "";
+    }
+
+    if (
+      typeof result === "number" &&
+      !Number.isFinite(result)
+    ) {
+      return "#NUM!";
+    }
+
+    return String(result);
+
+  } catch (error) {
+    console.warn(
+      `Formula display fallback ${address}`,
+      error
+    );
+
+    /*
+     * Unsupported formulas remain editable and visible
+     * rather than destroying workbook source.
+     */
+    return source;
+  }
+}
+
 function renderGrid(): string {
   const mergeLookup =
     buildWorksheetMergeLookup();
@@ -805,6 +1229,8 @@ function renderGrid(): string {
     for (let col = 0; col < COLS; col++) {
       const id = `${columnName(col)}${row}`;
       const value = cellValues.get(id) ?? "";
+      const displayValue =
+        workbookDisplayValue(id, value);
 
       const merge =
         mergeLookup.get(id);
@@ -836,7 +1262,7 @@ function renderGrid(): string {
             grid-row: ${gridRow};
           "
         >
-          ${escapeHtml(value)}
+          ${escapeHtml(displayValue)}
         </div>
       `;
     }
