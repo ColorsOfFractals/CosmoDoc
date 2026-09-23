@@ -1061,22 +1061,32 @@ function evaluateWorkbookExpression(
             /*
              * XLSX blank cells resolve as null.
              *
-             * Spreadsheet aggregate functions treat true blank
-             * range material as absent rather than numeric input.
-             * Normalize that once at the workbook boundary.
+             * Normalize true blanks away at the workbook boundary.
+             * For SUM ranges, Excel also ignores text cells such as
+             * "N/A" while retaining numeric cells.
              *
-             * Text and numeric values remain untouched:
-             * COUNT can ignore text according to its own semantics,
-             * SUM receives actual range material without blank sentinels.
+             * Keep this behavior at the XLSX bridge rather than
+             * changing the production SUM implementation globally.
              */
-            return value
-              .flat(Infinity)
-              .filter(
+            const material =
+              value
+                .flat(Infinity)
+                .filter(
+                  item =>
+                    item !== null &&
+                    item !== undefined &&
+                    item !== ""
+                );
+
+            if (name === "SUM") {
+              return material.filter(
                 item =>
-                  item !== null &&
-                  item !== undefined &&
-                  item !== ""
+                  typeof item === "number" &&
+                  Number.isFinite(item)
               );
+            }
+
+            return material;
           }
 
           return value;
@@ -2698,6 +2708,21 @@ function importWorksheetState(
           ) {
             value =
               `=${String(cell.value.formula)}`;
+          } else if (cell.value instanceof Date) {
+            /*
+             * ExcelJS exposes XLSX dates as JavaScript Date objects.
+             *
+             * Their UTC calendar components represent the workbook
+             * date. Stringifying through the local timezone can move
+             * midnight XLSX dates into the previous local day.
+             *
+             * Keep this bridge intentionally small: the current real
+             * workbook uses short calendar dates.
+             */
+            value =
+              `${cell.value.getUTCMonth() + 1}/` +
+              `${cell.value.getUTCDate()}/` +
+              `${cell.value.getUTCFullYear()}`;
           } else if (cell.value !== null) {
             value =
               String(cell.text ?? cell.value);
