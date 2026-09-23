@@ -15,7 +15,8 @@
                                 {
                                     "title":  "CosmoDoc",
                                     "width":  800,
-                                    "height":  600
+                                    "height":  600,
+                                    "icon":  "icons/icon.png"
                                 }
                             ],
                 "security":  {
