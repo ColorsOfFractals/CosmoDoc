@@ -2076,6 +2076,73 @@ function installWorksheetImageInteractions(): void {
     image.classList.add("worksheet-image-interactive");
     image.draggable = false;
 
+    /*
+     * CosmoDoc Bake 055
+     *
+     * The rendered image already owns the exact ExcelJS
+     * worksheet-media object through imageMedia.
+     *
+     * Give the image keyboard focus so Delete / Backspace can
+     * remove that exact worksheet image without inventing a
+     * second selection system.
+     */
+    image.tabIndex = 0;
+
+    image.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key !== "Delete" &&
+          event.key !== "Backspace"
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        /*
+         * ExcelJS exposes worksheet images for reading but does
+         * not provide a public removeImage() counterpart.
+         *
+         * _media is therefore the retained worksheet media
+         * collection that worksheet.getImages() reflects.
+         *
+         * Locate by object identity rather than captured index so
+         * deletion remains correct after earlier images disappear.
+         */
+        const worksheetMedia =
+          (worksheet as any)._media as any[];
+
+        if (!Array.isArray(worksheetMedia)) {
+          throw new Error(
+            "Worksheet media collection unavailable."
+          );
+        }
+
+        const mediaIndex =
+          worksheetMedia.indexOf(imageMedia);
+
+        if (mediaIndex < 0) {
+          throw new Error(
+            "Selected worksheet image was not found."
+          );
+        }
+
+        worksheetMedia.splice(mediaIndex, 1);
+
+        clearWorksheetImageUrls();
+        renderWorksheetImages();
+        installWorksheetImageInteractions();
+
+        dirtyState.textContent =
+          "MODIFIED";
+
+        statusText.textContent =
+          `IMAGE DELETED // ${activeSheetName}`;
+      }
+    );
+
     const handle =
       document.createElement("div");
 
@@ -2119,6 +2186,14 @@ function installWorksheetImageInteractions(): void {
       image.classList.add(
         "worksheet-image-selected"
       );
+
+      /*
+       * Selection and keyboard authority are now the same thing.
+       * preventScroll avoids jumping the worksheet when clicked.
+       */
+      image.focus({
+        preventScroll: true
+      });
 
       handle.classList.add("active");
       syncHandle();
