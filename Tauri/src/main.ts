@@ -2854,17 +2854,52 @@ function writeSheetStateToWorksheet(
   state: SheetState,
   worksheet: ExcelJS.Worksheet
 ): void {
-  for (
-    const [column,width] of state.columnWidths
-  ) {
-    worksheet.getColumn(column).width =
-      Math.max(
-        1,
-        (width - 12) / 7
-      );
+  /*
+   * CosmoDoc Bake 057
+   *
+   * A merged XLSX range has one value authority: its master cell.
+   *
+   * cellValues is intentionally still allowed to remain the flat
+   * UI/runtime map. At the workbook serialization boundary we
+   * canonicalize every address through ExcelJS itself.
+   *
+   * This prevents merged child aliases from overwriting the
+   * authoritative master value later in the save loop.
+   */
+  const canonicalValues =
+    new Map<string, string>();
+
+  for (const [id, value] of state.cellValues) {
+    const cell =
+      worksheet.getCell(id);
+
+    const canonicalAddress =
+      cell.isMerged
+        ? cell.master.address
+        : cell.address;
+
+    /*
+     * The rendered/editable merged cell is the master. If both a
+     * master and one or more merged aliases exist in cellValues,
+     * the explicit master entry wins.
+     */
+    if (
+      canonicalAddress !== id &&
+      canonicalValues.has(canonicalAddress)
+    ) {
+      continue;
+    }
+
+    canonicalValues.set(
+      canonicalAddress,
+      value
+    );
   }
 
-  for (const [id,value] of state.cellValues) {
+  for (
+    const [id, value]
+    of canonicalValues
+  ) {
     if (value.startsWith("=")) {
       worksheet.getCell(id).value = {
         formula: value.substring(1)
