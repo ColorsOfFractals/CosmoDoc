@@ -2855,17 +2855,18 @@ function writeSheetStateToWorksheet(
   worksheet: ExcelJS.Worksheet
 ): void {
   /*
-   * CosmoDoc Bake 057
+   * CosmoDoc Bake 058
    *
-   * A merged XLSX range has one value authority: its master cell.
+   * Runtime/UI values intentionally remain strings.
    *
-   * cellValues is intentionally still allowed to remain the flat
-   * UI/runtime map. At the workbook serialization boundary we
-   * canonicalize every address through ExcelJS itself.
+   * XLSX serialization is the authority boundary where textual
+   * numeric input becomes an actual numeric XLSX scalar.
    *
-   * This prevents merged child aliases from overwriting the
-   * authoritative master value later in the save loop.
+   * This preserves the 057 merged-cell law while allowing native
+   * Excel formulas such as SUM() and COUNT() to consume CosmoDoc
+   * edits immediately when the workbook is opened in Excel.
    */
+
   const canonicalValues =
     new Map<string, string>();
 
@@ -2879,9 +2880,8 @@ function writeSheetStateToWorksheet(
         : cell.address;
 
     /*
-     * The rendered/editable merged cell is the master. If both a
-     * master and one or more merged aliases exist in cellValues,
-     * the explicit master entry wins.
+     * Bake 057:
+     * merged aliases cannot overwrite their master.
      */
     if (
       canonicalAddress !== id &&
@@ -2900,13 +2900,65 @@ function writeSheetStateToWorksheet(
     const [id, value]
     of canonicalValues
   ) {
+    const cell =
+      worksheet.getCell(id);
+
+    /*
+     * FORMULA AUTHORITY
+     */
     if (value.startsWith("=")) {
-      worksheet.getCell(id).value = {
+      cell.value = {
         formula: value.substring(1)
       };
-    } else {
-      worksheet.getCell(id).value = value;
+
+      continue;
     }
+
+    /*
+     * EMPTY TEXT AUTHORITY
+     *
+     * Do not coerce "" into numeric zero.
+     */
+    if (value === "") {
+      cell.value = "";
+      continue;
+    }
+
+    /*
+     * NUMERIC SCALAR AUTHORITY
+     *
+     * Only strings whose entire trimmed representation is a
+     * conventional decimal number are promoted.
+     *
+     * Examples:
+     *
+     * "20"      -> 20
+     * "38"      -> 38
+     * "-12"     -> -12
+     * "14.50"   -> 14.5
+     * ".75"     -> 0.75
+     *
+     * Ordinary text, dates, labels, IDs, etc. remain strings.
+     */
+    const trimmed =
+      value.trim();
+
+    const isNumericScalar =
+      /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(
+        trimmed
+      );
+
+    if (isNumericScalar) {
+      cell.value =
+        Number(trimmed);
+
+      continue;
+    }
+
+    /*
+     * TEXT AUTHORITY
+     */
+    cell.value = value;
   }
 }
 async function loadWorkbook(path: string): Promise<void> {
