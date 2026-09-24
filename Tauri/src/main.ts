@@ -2465,6 +2465,35 @@ function installWorksheetImageInteractions(): void {
   });
 }
 
+/*
+ * CosmoDoc Bake 056RR
+ *
+ * Recalculate DISPLAY ONLY for formula cells using the existing
+ * cellValues + workbookDisplayValue machinery.
+ *
+ * No grid rebuild.
+ * No geometry rebuild.
+ * No image rebuild.
+ */
+function refreshFormulaDisplays(): void {
+  cellValues.forEach((source, address) => {
+    if (!source.startsWith("=")) {
+      return;
+    }
+
+    const cell =
+      document.querySelector<HTMLDivElement>(
+        `[data-cell="${address}"]`
+      );
+
+    if (!cell) {
+      return;
+    }
+
+    cell.textContent =
+      workbookDisplayValue(address, source);
+  });
+}
 function refreshGrid(): void {
   grid.innerHTML = renderGrid();
   applyWorkbookGeometry();
@@ -2551,6 +2580,8 @@ grid.addEventListener("dblclick", (event) => {
     dirtyState.textContent = "MUTATED";
     statusText.textContent = `EDITED // ${id}`;
 
+    refreshFormulaDisplays();
+
 
   };
 
@@ -2595,6 +2626,8 @@ formulaInput.addEventListener("input", () => {
 
   dirtyState.textContent = "MUTATED";
   statusText.textContent = `EDITED // ${activeCell}`;
+
+  refreshFormulaDisplays();
 });
 
 function closeThemeMenu(): void {
