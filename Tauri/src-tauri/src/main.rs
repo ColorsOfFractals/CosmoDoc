@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    cosmicsheet_lib::run()
+    cosmodoc_lib::run()
 }

@@ -1898,7 +1898,7 @@ const themeOptions =
   );
 
 /*
- * COSMICSHEET // ASCII-SAFE THEME CATALOG
+ * COSMODOC // ASCII-SAFE THEME CATALOG
  *
  * Emoji are represented as JavaScript Unicode escapes.
  * main.ts therefore does not depend on PowerShell preserving
@@ -2525,6 +2525,81 @@ function selectCell(id: string): void {
   statusText.textContent = `READY // ${id}`;
 }
 
+/* COSMODOC_KEYBOARD_060
+   Arrow keys navigate the existing grid.
+   Space opens the existing double-click editor.
+   Editing and text inputs retain their own keyboard behavior.
+*/
+document.addEventListener("keydown", (event: KeyboardEvent) => {
+  if (event.defaultPrevented ||
+      event.ctrlKey || event.altKey || event.metaKey ||
+      event.isComposing) return;
+
+  const target = event.target as HTMLElement | null;
+
+  if (target?.closest(
+    'input, textarea, select, button, [contenteditable="true"], [role="textbox"]'
+  )) return;
+
+  const movement: Record<string, [number, number]> = {
+    ArrowUp: [-1, 0],
+    ArrowDown: [1, 0],
+    ArrowLeft: [0, -1],
+    ArrowRight: [0, 1]
+  };
+
+  if (event.code === "Space" || event.key === " ") {
+    const cell = grid.querySelector<HTMLElement>(
+      `[data-cell="${activeCell}"]`
+    );
+
+    if (!cell) return;
+
+    event.preventDefault();
+    cell.dispatchEvent(new MouseEvent("dblclick", {
+      bubbles: true
+    }));
+    return;
+  }
+
+  const delta = movement[event.key];
+  if (!delta) return;
+
+  const match = /^([A-Z]+)([0-9]+)$/.exec(activeCell);
+  if (!match) return;
+
+  let column = 0;
+  for (const character of match[1]) {
+    column = column * 26 + character.charCodeAt(0) - 64;
+  }
+
+  const row = Number(match[2]);
+  const nextRow = Math.max(1, Math.min(ROWS, row + delta[0]));
+  const nextColumn = Math.max(1, Math.min(COLS, column + delta[1]));
+
+  let index = nextColumn;
+  let letters = "";
+
+  while (index > 0) {
+    index--;
+    letters = String.fromCharCode(65 + index % 26) + letters;
+    index = Math.floor(index / 26);
+  }
+
+  const nextId = `${letters}${nextRow}`;
+  const nextCell = grid.querySelector<HTMLElement>(
+    `[data-cell="${nextId}"]`
+  );
+
+  if (!nextCell) return;
+
+  event.preventDefault();
+  selectCell(nextId);
+  nextCell.scrollIntoView({
+    block: "nearest",
+    inline: "nearest"
+  });
+});
 grid.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   const cell = target.closest<HTMLDivElement>(".cell");

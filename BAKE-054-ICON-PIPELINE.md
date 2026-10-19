@@ -1,4 +1,4 @@
-﻿# CosmoDoc Bake 054 — Native Icon Pipeline Proven
+# CosmoDoc Bake 054 — Native Icon Pipeline Proven
 
 ## Result
 
@@ -31,7 +31,7 @@ tauri.conf.json
 → icons/CosmoDoc.ico
 → tauri-build Windows resource generation
 → Windows resource ID 32512
-→ cosmicsheet.exe
+→ cosmodoc.exe
 
 ## Important Discovery
 

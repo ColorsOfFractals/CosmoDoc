@@ -535,8 +535,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "cosmicsheet"
-version = "1.0.0"
+name = "cosmodoc"
+version = "1.0.1"
 dependencies = [
  "serde",
  "serde_json",
