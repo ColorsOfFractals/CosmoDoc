@@ -2541,11 +2541,19 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
     'input, textarea, select, button, [contenteditable="true"], [role="textbox"]'
   )) return;
 
+  /* COSMODOC_WASD_072
+     Arrow keys and WASD share the same navigation engine.
+     Text editing remains protected by the focus guard above.
+  */
   const movement: Record<string, [number, number]> = {
     ArrowUp: [-1, 0],
     ArrowDown: [1, 0],
     ArrowLeft: [0, -1],
-    ArrowRight: [0, 1]
+    ArrowRight: [0, 1],
+    w: [-1, 0],
+    s: [1, 0],
+    a: [0, -1],
+    d: [0, 1]
   };
 
   if (event.code === "Space" || event.key === " ") {
@@ -2562,7 +2570,11 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
     return;
   }
 
-  const delta = movement[event.key];
+  const navigationKey = event.key.startsWith("Arrow")
+    ? event.key
+    : event.key.toLowerCase();
+
+  const delta = movement[navigationKey];
   if (!delta) return;
 
   const match = /^([A-Z]+)([0-9]+)$/.exec(activeCell);
